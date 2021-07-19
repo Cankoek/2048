@@ -36,7 +36,7 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  fieldArray = [2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0]
   print(fieldArray)
   print("\n")
   print(moveRight(fieldArray))
@@ -44,6 +44,23 @@ def game()
 end
 
 def moveRight(field)
+  arrayPositionCounter = 2
+
+  until arrayPositionCounter < 0 do
+    #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+    if field[arrayPositionCounter+1] > 0
+      if field[arrayPositionCounter+1] == field[arrayPositionCounter]
+        field[arrayPositionCounter+1] = 2*field[arrayPositionCounter]
+        field[arrayPositionCounter] = 0
+      end
+    else
+      field[arrayPositionCounter+1] = field[arrayPositionCounter]
+      field[arrayPositionCounter] = 0
+    end
+
+    arrayPositionCounter -= 1
+  end
+  
   return field
 end
 
