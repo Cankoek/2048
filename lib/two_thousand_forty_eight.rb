@@ -37,9 +37,9 @@ To-do:
 
 def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,2,2,2,2 ,2,4,0,0 ,0,0,0]
-  print(fieldArray)
+  drawField(fieldArray)
   print("\n")
-  print(moveRight(fieldArray))
+  drawField(moveRight(fieldArray))
   return
 end
 
@@ -103,5 +103,14 @@ end
 #UI
 
 def drawField(field)
+  counter = 0
+  16.times do
+    print(field[counter])
+    print(" | ")
+    if counter == 3 or counter == 7 or counter == 11 or counter == 15
+      print("\n")
+    end
+    counter += 1
+  end
   return
 end
