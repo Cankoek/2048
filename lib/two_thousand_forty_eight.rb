@@ -36,7 +36,7 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,8,8,0,0,0,0,0,0,0,0,0,0,0,0]
+  fieldArray = [8,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   print(fieldArray)
   print("\n")
   print(moveRight(fieldArray))
@@ -62,6 +62,10 @@ def moveRight(field)
         end
       end
       moveToCounter += 1
+      if moveToCounter == 4
+        field[3] = field[arrayPositionCounter]
+        field[arrayPositionCounter] = 0
+      end
     end
     if arrayPositionCounter != -1
       arrayPositionCounter -= 1
