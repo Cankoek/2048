@@ -21,8 +21,8 @@ Moves just calculate the new position on for each number on the array.
 For visualization purposes: Create a new function drawing the array in a fancy way, add a points counter.
 
 To-do:
-  Add basic game logic
-  Add moveRight, moveLeft
+  Add basic game logic 
+  Add moveRight, moveLeft #moveRight done
   Add moveUp, moveDown
   Add function to create random numbers at random spots
   Add a basic UI for testing
@@ -36,7 +36,7 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  fieldArray = [8,8,0,0 ,0,2,0,2 ,2,2,2,2 ,2,4,0,0 ,0,0,0]
   print(fieldArray)
   print("\n")
   print(moveRight(fieldArray))
@@ -44,31 +44,45 @@ def game()
 end
 
 def moveRight(field)
-  arrayPositionCounter = 2
+  rowCounter = 0
+  4.times do
+    arrayPositionCounter = 2+rowCounter
+    
+    until arrayPositionCounter == -1+rowCounter do
 
-  until arrayPositionCounter == -1 do
-    #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
-    moveToCounter = 1
-    3.times do
-      if field[arrayPositionCounter+moveToCounter] > 0
-        if field[arrayPositionCounter] == field[arrayPositionCounter+moveToCounter]
-          field[arrayPositionCounter+moveToCounter] = 2*field[arrayPositionCounter]
-          field[arrayPositionCounter] = 0
-          break
-        else
-          field[arrayPositionCounter+moveToCounter-1] = field[arrayPositionCounter]
+      #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      moveToCounter = 1
+      4.times do
+        #Checks if any field to the right contains a number
+        if field[arrayPositionCounter+moveToCounter] > 0
+          #If the number in the field and current "to-move"-field is the same; merge them together
+          if field[arrayPositionCounter] == field[arrayPositionCounter+moveToCounter]
+            field[arrayPositionCounter+moveToCounter] = 2*field[arrayPositionCounter]
+            field[arrayPositionCounter] = 0
+            break
+          #Else if there is a number but not the same; move to the field infront of the already taken one
+          else
+            field[arrayPositionCounter+moveToCounter-1] = field[arrayPositionCounter]
+            field[arrayPositionCounter] = 0
+            break
+          end
+        end
+        #If there is no number to the right, move the "to-move"-field to the last possible field of the row
+        moveToCounter += 1
+        if moveToCounter == 4
+          field[3+rowCounter] = field[arrayPositionCounter]
           field[arrayPositionCounter] = 0
           break
         end
       end
-      moveToCounter += 1
-      if moveToCounter == 4
-        field[3] = field[arrayPositionCounter]
-        field[arrayPositionCounter] = 0
+      #Checks the min arrayPosCounter for each row
+      if arrayPositionCounter != -1+rowCounter
+        arrayPositionCounter -= 1
       end
     end
-    if arrayPositionCounter != -1
-      arrayPositionCounter -= 1
+    #Makes sure that rowCounter has a maximum value of 12
+    if rowCounter != 12
+      rowCounter += 4
     end
   end
   return field
