@@ -39,11 +39,11 @@ def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,2,2,2,2 ,2,4,0,4] 
   drawField(fieldArray)
   print("\n")
-  drawField(moveLeft(fieldArray))
+  drawField(shiftLeft(fieldArray))
   return
 end
 
-def moveRight(field)
+def shiftRight(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 2+rowCounter
@@ -95,7 +95,7 @@ def moveRight(field)
   return field
 end
 
-def moveLeft(field)
+def shiftLeft(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 1+rowCounter
@@ -147,11 +147,11 @@ def moveLeft(field)
   return field
 end
 
-def moveUp(field)
+def shiftUp(field)
   return field
 end
 
-def moveDown(field)
+def shiftDown(field)
   return field
 end
 
