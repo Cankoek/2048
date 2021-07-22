@@ -39,7 +39,7 @@ def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,2,2,2,2 ,2,4,0,4] 
   drawField(fieldArray)
   print("\n")
-  drawField(moveRight(fieldArray))
+  drawField(moveLeft(fieldArray))
   return
 end
 
@@ -96,6 +96,54 @@ def moveRight(field)
 end
 
 def moveLeft(field)
+  rowCounter = 0
+  4.times do
+    arrayPositionCounter = 1+rowCounter
+    
+    until arrayPositionCounter == 4+rowCounter do
+
+      #Check if there's a number to the left, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      moveToCounter = 1
+      4.times do
+
+        #New variable to fix an issue with array length; Without Ruby wouldnt work because theres an if-check checking an out of range array index
+        arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
+        if arrPosC_minus_MoveTo >= 16
+          arrPosC_minus_MoveTo = 15
+        end
+
+        #Checks if any field to the left contains a number
+        if field[arrPosC_minus_MoveTo] > 0
+          #If the number in the field and current "to-move"-field is the same; merge them together
+          if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
+            field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
+            field[arrayPositionCounter] = 0
+            break
+          #Else if there is a number but not the same; move to the field infront of the already taken one
+          else
+            field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter] 
+            field[arrayPositionCounter] = 0
+            break
+          end
+        end
+        #If there is no number to the left, move the "to-move"-field to the last possible field of the row
+        moveToCounter += 1
+        if moveToCounter == 4
+          field[rowCounter] = field[arrayPositionCounter]
+          field[arrayPositionCounter] = 0
+          break
+        end
+      end
+      #Checks the max arrayPosCounter for each row
+      if arrayPositionCounter != 4+rowCounter
+        arrayPositionCounter += 1
+      end
+    end
+    #Makes sure that rowCounter has a maximum value of 12
+    if rowCounter != 12
+      rowCounter += 4
+    end
+  end
   return field
 end
 
