@@ -71,6 +71,7 @@ def shiftRight(field)
             break
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
+            #If the "to-move" field is the field infront of the next field with a value; do nothing
             if field[arrPosC_plus_MoveTo-1] != field[arrayPositionCounter] 
               field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
               field[arrayPositionCounter] = 0
@@ -121,6 +122,7 @@ def shiftLeft(field)
             break
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
+            #If the "to-move" field is the field infront of the next field with a value; do nothing
             if field[arrPosC_minus_MoveTo+1] != field[arrayPositionCounter]
               field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter]
               field[arrayPositionCounter] = 0
