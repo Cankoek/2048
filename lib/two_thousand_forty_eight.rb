@@ -40,6 +40,8 @@ def game()
   drawField(fieldArray)
   print("\n")
   drawField(shiftLeft(fieldArray))
+  print("\n")
+  drawField(shiftRight(fieldArray))
   return
 end
 
@@ -54,7 +56,7 @@ def shiftRight(field)
       moveToCounter = 1
       4.times do
 
-        #New variable to fix an issue with array length; Without Ruby wouldnt work because theres an if-check checking an out of range array index
+        #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
         arrPosC_plus_MoveTo = arrayPositionCounter+moveToCounter
         if arrPosC_plus_MoveTo >= 16
           arrPosC_plus_MoveTo = 15
@@ -69,8 +71,10 @@ def shiftRight(field)
             break
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
-            field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
-            field[arrayPositionCounter] = 0
+            if field[arrPosC_plus_MoveTo-1] != field[arrayPositionCounter] 
+              field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
+              field[arrayPositionCounter] = 0
+            end
             break
           end
         end
@@ -105,12 +109,8 @@ def shiftLeft(field)
       #Check if there's a number to the left, if so; check which number. If its the same; merge else stay. If not, move number and reset field
       moveToCounter = 1
       4.times do
-
         #New variable to fix an issue with array length; Without Ruby wouldnt work because theres an if-check checking an out of range array index
         arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
-        if arrPosC_minus_MoveTo >= 16
-          arrPosC_minus_MoveTo = 15
-        end
 
         #Checks if any field to the left contains a number
         if field[arrPosC_minus_MoveTo] > 0
@@ -121,8 +121,10 @@ def shiftLeft(field)
             break
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
-            field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter] 
-            field[arrayPositionCounter] = 0
+            if field[arrPosC_minus_MoveTo+1] != field[arrayPositionCounter]
+              field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter]
+              field[arrayPositionCounter] = 0
+            end
             break
           end
         end
@@ -131,6 +133,7 @@ def shiftLeft(field)
         if moveToCounter == 4
           field[rowCounter] = field[arrayPositionCounter]
           field[arrayPositionCounter] = 0
+          
           break
         end
       end
