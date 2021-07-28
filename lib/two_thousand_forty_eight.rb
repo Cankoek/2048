@@ -40,10 +40,6 @@ def game()
   drawField(fieldArray)
   print("\n")
   drawField(shiftDown(fieldArray))
-  print("\n")
-  drawField(shiftLeft(fieldArray))
-  print("\n")
-  drawField(shiftRight(fieldArray))
   return
 end
 
@@ -161,8 +157,7 @@ def shiftDown(field)
     arrayPositionCounter = 8 + columnCounter
 
     until arrayPositionCounter < 0 do
-
-      #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      #Check if there's a number under the current number, if so; check which number. If its the same; merge else stay. If not, move number and reset field
       moveToCounter = 4
       4.times do
 
@@ -172,7 +167,7 @@ def shiftDown(field)
           arrPosC_plus_MoveTo = 15
         end
 
-        #Checks if any field to the right contains a number
+        #Checks if any field underneath contains a number
         if field[arrPosC_plus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_plus_MoveTo] 
@@ -189,7 +184,7 @@ def shiftDown(field)
             break
           end
         end
-        #If there is no number to the right, move the "to-move"-field to the last possible field of the column
+        #If there is no number underneath, move the "to-move"-field to the last possible field of the column
         moveToCounter += 4
         if moveToCounter == 16
           field[3+columnCounter] = field[arrayPositionCounter]
@@ -198,7 +193,7 @@ def shiftDown(field)
         end
       end
       #Checks the min arrayPosCounter for each column
-      if arrayPositionCounter > columnCounter
+      if arrayPositionCounter >= 0
         arrayPositionCounter -= 4
       end
     end
