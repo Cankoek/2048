@@ -36,10 +36,10 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,0,0 ,0,2,0,2 ,2,2,2,2 ,2,4,0,4] 
+  fieldArray = [8,8,0,0 ,0,2,0,2 ,0,2,2,2 ,2,4,0,2] 
   drawField(fieldArray)
   print("\n")
-  drawField(shiftDown(fieldArray))
+  drawField(shiftRight(fieldArray))
   return
 end
 
@@ -70,7 +70,7 @@ def shiftRight(field)
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
-            if field[arrPosC_plus_MoveTo-1] != field[arrayPositionCounter] 
+            if arrPosC_plus_MoveTo-1 != arrayPositionCounter
               field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
               field[arrayPositionCounter] = 0
             end
@@ -121,7 +121,7 @@ def shiftLeft(field)
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
-            if field[arrPosC_minus_MoveTo+1] != field[arrayPositionCounter]
+            if arrPosC_minus_MoveTo+1 != arrayPositionCounter
               field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter]
               field[arrayPositionCounter] = 0
             end
@@ -156,7 +156,10 @@ def shiftDown(field)
   4.times do
     arrayPositionCounter = 8 + columnCounter
 
+    
+
     until arrayPositionCounter < 0 do
+      maxColumnVal  = 12+columnCounter
       #Check if there's a number under the current number, if so; check which number. If its the same; merge else stay. If not, move number and reset field
       moveToCounter = 4
       4.times do
@@ -177,7 +180,7 @@ def shiftDown(field)
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
-            if field[arrPosC_plus_MoveTo-4] != field[arrayPositionCounter] 
+            if arrPosC_plus_MoveTo-4 != arrayPositionCounter
               field[arrPosC_plus_MoveTo-4] = field[arrayPositionCounter] 
               field[arrayPositionCounter] = 0
             end
@@ -185,9 +188,10 @@ def shiftDown(field)
           end
         end
         #If there is no number underneath, move the "to-move"-field to the last possible field of the column
+        
         moveToCounter += 4
         if moveToCounter == 16
-          field[3+columnCounter] = field[arrayPositionCounter]
+          field[columnCounter+12] = field[arrayPositionCounter]
           field[arrayPositionCounter] = 0
           break
         end
@@ -197,7 +201,7 @@ def shiftDown(field)
         arrayPositionCounter -= 4
       end
     end
-    #Makes sure that columnCounter has a maximum value of 12
+    #Makes sure that columnCounter has a maximum value of 3
     if columnCounter != 3
       columnCounter += 1
     end
