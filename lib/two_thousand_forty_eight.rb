@@ -39,7 +39,7 @@ def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,4,0,2] 
   drawField(fieldArray)
   print("\n")
-  drawField(shiftDown(fieldArray))
+  drawField(shiftUp(fieldArray))
   return
 end
 
@@ -217,29 +217,39 @@ end
 
 def shiftUp(field)
   columnCounter = 0
-
   4.times do
-    arrayPositionCounter = 4 + columnCounter
+    arrayPositionCounter = 4+columnCounter
+    
+    #Checks max ArrPos
+    until arrayPositionCounter == 16+columnCounter do
 
-    until arrayPositionCounter >= 16 do
-      minColumnValue  = columnCounter
-      #Check if there's a number under the current number, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
       moveToCounter = 4
       4.times do
 
         #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
         arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
-        if arrPosC_minus_MoveTo < 0
-          arrPosC_minus_MoveTo = 0
+
+        if arrPosC_minus_MoveTo <= 0 && columnCounter == 0
+          arrPosC_minus_MoveTo = columnCounter
         end
-        #Checks if any field underneath contains a number
+        if arrPosC_minus_MoveTo <= 0 && columnCounter == 1
+          arrPosC_minus_MoveTo = columnCounter
+        end
+        if arrPosC_minus_MoveTo <= 0 && columnCounter == 2
+          arrPosC_minus_MoveTo = columnCounter
+        end
+        if arrPosC_minus_MoveTo <= 0 && columnCounter == 3
+          arrPosC_minus_MoveTo = columnCounter
+        end
+
+        #Checks if any field to the right contains a number
         if field[arrPosC_minus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
             field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
             field[arrayPositionCounter] = 0
             break
-
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
@@ -250,8 +260,7 @@ def shiftUp(field)
             break
           end
         end
-        #If there is no number underneath, move the "to-move"-field to the last possible field of the column
-        
+        #If there is no number to the right, move the "to-move"-field to the last possible field of the row
         moveToCounter += 4
         if moveToCounter == 16
           field[columnCounter] = field[arrayPositionCounter]
@@ -259,16 +268,15 @@ def shiftUp(field)
           break
         end
       end
-      #Checks the min arrayPosCounter for each column
-      if arrayPositionCounter >= 0
+      #Checks the min arrayPosCounter for each row
+      if arrayPositionCounter >= columnCounter
         arrayPositionCounter += 4
       end
     end
-    #Makes sure that columnCounter has a maximum value of 3
-    if columnCounter != 3
-      columnCounter += 1
+    #Makes sure that columnCounter has a maximum value of 12
+    if columnCounter != 4
+        columnCounter += 1
     end
-    #Makes sure arrayPosCounter stays in the range 8-11
   end
   return field
 end
