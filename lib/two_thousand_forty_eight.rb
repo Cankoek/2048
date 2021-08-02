@@ -230,19 +230,6 @@ def shiftUp(field)
         #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
         arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
 
-        if arrPosC_minus_MoveTo <= 0 && columnCounter == 0
-          arrPosC_minus_MoveTo = columnCounter
-        end
-        if arrPosC_minus_MoveTo <= 0 && columnCounter == 1
-          arrPosC_minus_MoveTo = columnCounter
-        end
-        if arrPosC_minus_MoveTo <= 0 && columnCounter == 2
-          arrPosC_minus_MoveTo = columnCounter
-        end
-        if arrPosC_minus_MoveTo <= 0 && columnCounter == 3
-          arrPosC_minus_MoveTo = columnCounter
-        end
-
         #Checks if any field to the right contains a number
         if field[arrPosC_minus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
