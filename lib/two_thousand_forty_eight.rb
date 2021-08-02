@@ -39,7 +39,7 @@ def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,4,0,2] 
   drawField(fieldArray)
   print("\n")
-  drawField(shiftUp(fieldArray))
+  drawField(shiftDown(fieldArray))
   return
 end
 
@@ -156,7 +156,7 @@ def shiftDown(field)
     arrayPositionCounter = 8+columnCounter
     
     #Checks min ArrPos
-    until arrayPositionCounter == columnCounter do
+    until arrayPositionCounter == -4+columnCounter do
 
       #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
       moveToCounter = 4
@@ -203,7 +203,7 @@ def shiftDown(field)
         end
       end
       #Checks the min arrayPosCounter for each row
-      if arrayPositionCounter != columnCounter
+      if arrayPositionCounter >= columnCounter
         arrayPositionCounter -= 4
       end
     end
