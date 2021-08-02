@@ -36,10 +36,10 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,0,0 ,0,2,0,2 ,0,2,2,2 ,2,4,0,2] 
+  fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,4,0,2] 
   drawField(fieldArray)
   print("\n")
-  drawField(shiftRight(fieldArray))
+  drawField(shiftUp(fieldArray))
   return
 end
 
@@ -156,8 +156,6 @@ def shiftDown(field)
   4.times do
     arrayPositionCounter = 8 + columnCounter
 
-    
-
     until arrayPositionCounter < 0 do
       maxColumnVal  = 12+columnCounter
       #Check if there's a number under the current number, if so; check which number. If its the same; merge else stay. If not, move number and reset field
@@ -169,7 +167,6 @@ def shiftDown(field)
         if arrPosC_plus_MoveTo >= 16
           arrPosC_plus_MoveTo = 15
         end
-
         #Checks if any field underneath contains a number
         if field[arrPosC_plus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
@@ -177,6 +174,7 @@ def shiftDown(field)
             field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
             field[arrayPositionCounter] = 0
             break
+
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
@@ -211,6 +209,60 @@ def shiftDown(field)
 end
 
 def shiftUp(field)
+  columnCounter = 0
+
+  4.times do
+    arrayPositionCounter = 4 + columnCounter
+
+    until arrayPositionCounter > 16 do
+      minColumnValue  = columnCounter
+      #Check if there's a number under the current number, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      moveToCounter = 4
+      4.times do
+
+        #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
+        arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
+        if arrPosC_minus_MoveTo < 0
+          arrPosC_minus_MoveTo = 0
+        end
+        #Checks if any field underneath contains a number
+        if field[arrPosC_minus_MoveTo] > 0
+          #If the number in the field and current "to-move"-field is the same; merge them together
+          if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
+            field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
+            field[arrayPositionCounter] = 0
+            break
+
+          #Else if there is a number but not the same; move to the field infront of the already taken one
+          else
+            #If the "to-move" field is the field infront of the next field with a value; do nothing
+            if arrPosC_minus_MoveTo+4 != arrayPositionCounter
+              field[arrPosC_minus_MoveTo+4] = field[arrayPositionCounter] 
+              field[arrayPositionCounter] = 0
+            end
+            break
+          end
+        end
+        #If there is no number underneath, move the "to-move"-field to the last possible field of the column
+        
+        moveToCounter += 4
+        if moveToCounter == 16
+          field[columnCounter] = field[arrayPositionCounter]
+          field[arrayPositionCounter] = 0
+          break
+        end
+      end
+      #Checks the min arrayPosCounter for each column
+      if arrayPositionCounter >= 0
+        arrayPositionCounter += 4
+      end
+    end
+    #Makes sure that columnCounter has a maximum value of 3
+    if columnCounter != 3
+      columnCounter += 1
+    end
+    #Makes sure arrayPosCounter stays in the range 8-11
+  end
   return field
 end
 
