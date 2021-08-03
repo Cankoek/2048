@@ -37,6 +37,7 @@ To-do:
 
 def game()
   fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,2,2,2] 
+  isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
   drawField(fieldArray)
   print("\n")
   drawField(shiftRight(fieldArray))
@@ -56,7 +57,7 @@ def shiftRight(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 2+rowCounter
-    
+    isShifted = resetIsShifted(isShifted)
     until arrayPositionCounter == -1+rowCounter do
 
       #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
@@ -111,7 +112,7 @@ def shiftLeft(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 1+rowCounter
-    
+    isShifted = resetIsShifted(isShifted)
     until arrayPositionCounter == 4+rowCounter do
 
       #Check if there's a number to the left, if so; check which number. If its the same; merge else stay. If not, move number and reset field
@@ -163,7 +164,7 @@ def shiftDown(field)
   columnCounter = 0
   4.times do
     arrayPositionCounter = 8+columnCounter
-    
+    isShifted = resetIsShifted(isShifted)
     #Checks min ArrPos
     until arrayPositionCounter == -4+columnCounter do
 
@@ -228,7 +229,7 @@ def shiftUp(field)
   columnCounter = 0
   4.times do
     arrayPositionCounter = 4+columnCounter
-    
+    isShifted = resetIsShifted(isShifted)
     #Checks max ArrPos
     until arrayPositionCounter == 16+columnCounter do
 
