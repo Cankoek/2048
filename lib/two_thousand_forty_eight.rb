@@ -36,11 +36,11 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [4,2,0,2 ,0,2,0,2 ,4,2,2,2 ,2,2,2,2] 
+  fieldArray = [2,2,0,4 ,2,2,0,2 ,0,2,2,2 ,4,2,2,2] 
   isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
   drawField(fieldArray)
   print("\n")
-  drawField(shiftRight(fieldArray))
+  drawField(shiftUp(fieldArray))
   return
 end
 
@@ -115,7 +115,7 @@ def shiftLeft(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 1+rowCounter
-    isShifted = resetIsShifted(isShifted)
+    isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
     until arrayPositionCounter == 4+rowCounter do
 
       #Check if there's a number to the left, if so; check which number. If its the same; merge else stay. If not, move number and reset field
@@ -128,9 +128,21 @@ def shiftLeft(field)
         if field[arrPosC_minus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
-            field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
-            break
+            if isShifted[arrPosC_minus_MoveTo] == 0
+              field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
+              field[arrayPositionCounter] = 0
+              isShifted[arrPosC_minus_MoveTo] = 1
+              break
+            else
+              if isShifted[arrPosC_minus_MoveTo] == 1
+                if arrPosC_minus_MoveTo+1 != arrayPositionCounter
+                  field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter] 
+                  field[arrayPositionCounter] = 0
+                  isShifted[arrPosC_minus_MoveTo] = 1
+                end
+                break
+              end
+            end
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
@@ -167,7 +179,7 @@ def shiftDown(field)
   columnCounter = 0
   4.times do
     arrayPositionCounter = 8+columnCounter
-    isShifted = resetIsShifted(isShifted)
+    isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
     #Checks min ArrPos
     until arrayPositionCounter == -4+columnCounter do
 
@@ -194,9 +206,21 @@ def shiftDown(field)
         if field[arrPosC_plus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_plus_MoveTo] 
-            field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
-            break
+            if isShifted[arrPosC_plus_MoveTo] == 0
+              field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
+              field[arrayPositionCounter] = 0
+              isShifted[arrPosC_plus_MoveTo] = 1
+              break
+            else
+              if isShifted[arrPosC_plus_MoveTo] == 1
+                if arrPosC_plus_MoveTo-4 != arrayPositionCounter
+                  field[arrPosC_plus_MoveTo-4] = field[arrayPositionCounter] 
+                  field[arrayPositionCounter] = 0
+                  isShifted[arrPosC_plus_MoveTo] = 1
+                end
+                break
+              end
+            end
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
@@ -232,7 +256,7 @@ def shiftUp(field)
   columnCounter = 0
   4.times do
     arrayPositionCounter = 4+columnCounter
-    isShifted = resetIsShifted(isShifted)
+    isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
     #Checks max ArrPos
     until arrayPositionCounter == 16+columnCounter do
 
@@ -247,9 +271,21 @@ def shiftUp(field)
         if field[arrPosC_minus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
-            field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
-            break
+            if isShifted[arrPosC_minus_MoveTo] == 0
+              field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
+              field[arrayPositionCounter] = 0
+              isShifted[arrPosC_minus_MoveTo] = 1
+              break
+            else
+              if isShifted[arrPosC_minus_MoveTo] == 1
+                if arrPosC_minus_MoveTo+4 != arrayPositionCounter
+                  field[arrPosC_minus_MoveTo+4] = field[arrayPositionCounter] 
+                  field[arrayPositionCounter] = 0
+                  isShifted[arrPosC_minus_MoveTo] = 1
+                end
+                break
+              end
+            end
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
