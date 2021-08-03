@@ -38,9 +38,8 @@ To-do:
 def game()
   fieldArray = [2,2,0,4 ,2,2,0,2 ,0,2,2,2 ,4,2,2,2] 
   isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
-  drawField(fieldArray)
+  print(generateRandomInt())
   print("\n")
-  drawField(shiftUp(fieldArray))
   return
 end
 
@@ -317,16 +316,16 @@ def shiftUp(field)
   return field
 end
 
-def generateRandomNumber()
-  while true
-    ranInt = rand(2..4)
-    if ranInt % 2 == 0
-      break
-    end
+def generateRandomInt()
+  #10% probability of a 4 generating, else 2
+  ranInt = rand(0.0..1.0)
+  if ranInt < 0.9 
+    ranInt = 2
+  else
+    ranInt = 4
   end
   return ranInt
 end
-
 #UI
 
 def drawField(field)
