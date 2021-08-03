@@ -49,19 +49,23 @@ class Game
       oldGrid = grid
       drawGrid(grid)
       direction = userInput()
-      if direction.downcase == "w"
+
+      case direction.downcase
+      when 'w'
         grid = shiftUp(grid)
-      end
-      if direction.downcase == "a"
+      when 'a'
         grid = shiftLeft(grid)
-      end
-      if direction.downcase == "s"
+      when 's' 
         grid = shiftDown(grid)
-      end
-      if direction.downcase == "d"
+      when 'd'
         grid = shiftRight(grid)
       end
+
       if checkWin(grid) == true
+        break
+      end
+      if checkLoose(grid) == true
+        print("\nYou lost.")
         break
       end
       grid = addRandomNumber(grid)
@@ -355,9 +359,13 @@ class Game
 
   def addRandomNumber(grid)
     while true
-      randvalue = rand(0..15)
-      if grid[randvalue] == 0
-        grid[randvalue] = generateRandomInt()
+      if grid.include? 0
+        randvalue = rand(0..15)
+        if grid[randvalue] == 0
+          grid[randvalue] = generateRandomInt()
+          break
+        end
+      else
         break
       end
     end
@@ -393,31 +401,29 @@ class Game
     #Check for every position if it has a neighbour which has the same value
     counter = 0
     16.times do
-      plusone = counter + 1
-      plusfour = counter + 4
-      minusone = counter - 1
-      minusfour = counter + 4
-      if plusone > 15
-        plusone = 15
+      if counter < 15
+        plusone = counter + 1
+        if grid[plusone] == grid[counter]
+          return false
+        end
       end
-      if plusfour > 15
-        plusfour = 15
+      if counter > 0
+        minusone = counter - 1
+        if grid[minusone] == grid[counter]
+          return false
+        end
       end
-      if minusone < 0
-        minusone = 0
+      if counter < 12
+        plusfour = counter + 4
+        if grid[plusfour] == grid[counter]
+          return false
+        end
       end
-      if minusfour < 0
-        minusfour = 0
-      end
-
-      if grid[plusone] == grid[counter]
-        return false
-      elsif grid[minusone] == grid[counter]
-        return false
-      elsif grid[plusfour] == grid[counter]
-        return false
-      elsif grid[minusfour] == grid[counter]
-        return false
+      if counter > 3
+        minusfour = counter + 4
+        if grid[minusfour] == grid[counter]
+          return false
+        end
       end
       counter += 1
     end
@@ -430,13 +436,13 @@ class Game
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
-      print(grid[counter])
-      print(" | ")
+      print(grid[counter], " | ")
       if counter == 3 or counter == 7 or counter == 11 or counter == 15
         print("\n")
       end
       counter += 1
     end
+    print("\n")
     return
   end
 
