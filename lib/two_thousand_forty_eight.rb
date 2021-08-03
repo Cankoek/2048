@@ -339,6 +339,22 @@ def addRandomNumber(field)
   end
   return field
 end
+
+def userInput()
+  while true
+    puts("w:Up a:Left s:Down d:Right\n")
+    input = gets.chomp
+    print(input)
+    if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d"
+      break
+    else
+      system "clear"
+      puts("Invalid Input. Try again.")
+    end
+  end
+  return input
+end
+
 #UI
 
 def drawField(field)
