@@ -36,9 +36,11 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [2,2,0,4 ,2,2,0,2 ,0,2,2,2 ,4,2,2,2] 
-  isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
-  print(generateRandomInt())
+  fieldArray = [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0]
+  print(fieldArray)
+  print("\n")
+  fieldArray = addRandomNumber(fieldArray)
+  print(fieldArray)
   print("\n")
   return
 end
@@ -325,6 +327,17 @@ def generateRandomInt()
     ranInt = 4
   end
   return ranInt
+end
+
+def addRandomNumber(field)
+  while true
+    randvalue = rand(0..15)
+    if field[randvalue] == 0
+      field[randvalue] = generateRandomInt()
+      break
+    end
+  end
+  return field
 end
 #UI
 
