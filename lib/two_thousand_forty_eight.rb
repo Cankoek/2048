@@ -317,6 +317,9 @@ def shiftUp(field)
   return field
 end
 
+def generateRandomNumber(field)
+  return field
+end
 
 #UI
 
