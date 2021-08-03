@@ -387,6 +387,7 @@ class Game
   end
 
   def checkWin(grid)
+    #If array contains 2048, you've won
     if grid.include? 2048
       return true
     end
@@ -437,7 +438,7 @@ class Game
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
-      print(grid[counter], " | ")
+      print("[ ",grid[counter], " ] ")
       if counter == 3 or counter == 7 or counter == 11 or counter == 15
         print("\n")
       end
