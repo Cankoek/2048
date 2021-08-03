@@ -46,24 +46,25 @@ class Game
   #Game Routine
   def routine(grid)
     while true
+      oldGrid = grid
       drawGrid(grid)
       direction = userInput()
       if direction.downcase == "w"
         grid = shiftUp(grid)
-        grid = addRandomNumber(grid)
       end
       if direction.downcase == "a"
         grid = shiftLeft(grid)
-        grid = addRandomNumber(grid)
       end
       if direction.downcase == "s"
         grid = shiftDown(grid)
-        grid = addRandomNumber(grid)
       end
       if direction.downcase == "d"
         grid = shiftRight(grid)
-        grid = addRandomNumber(grid)
       end
+      if checkWin(grid) == true
+        break
+      end
+      grid = addRandomNumber(grid)
     end
   end
 
@@ -384,6 +385,45 @@ class Game
     return false
   end
 
+  def checkLoose(grid)
+    #Check if array is full of numbers.
+    if grid.include? 0
+      return false
+    end
+    #Check for every position if it has a neighbour which has the same value
+    counter = 0
+    16.times do
+      plusone = counter + 1
+      plusfour = counter + 4
+      minusone = counter - 1
+      minusfour = counter + 4
+      if plusone > 15
+        plusone = 15
+      end
+      if plusfour > 15
+        plusfour = 15
+      end
+      if minusone < 0
+        minusone = 0
+      end
+      if minusfour < 0
+        minusfour = 0
+      end
+
+      if grid[plusone] == grid[counter]
+        return false
+      elsif grid[minusone] == grid[counter]
+        return false
+      elsif grid[plusfour] == grid[counter]
+        return false
+      elsif grid[minusfour] == grid[counter]
+        return false
+      end
+      counter += 1
+    end
+    return true
+  end
+  
   #User Interface
   def drawGrid(grid)
     system "clear"
