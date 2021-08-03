@@ -317,8 +317,14 @@ def shiftUp(field)
   return field
 end
 
-def generateRandomNumber(field)
-  return field
+def generateRandomNumber()
+  while true
+    ranInt = rand(2..4)
+    if ranInt % 2 == 0
+      break
+    end
+  end
+  return ranInt
 end
 
 #UI
