@@ -36,7 +36,7 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,2,2,2] 
+  fieldArray = [4,2,0,2 ,0,2,0,2 ,4,2,2,2 ,2,2,2,2] 
   isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
   drawField(fieldArray)
   print("\n")
@@ -44,20 +44,11 @@ def game()
   return
 end
 
-def resetIsShifted(isShifted)
-  counter = 0
-  16.times do
-    isShifted[counter] = 0
-    counter += 1
-  end
-  return isShifted
-end
-
 def shiftRight(field)
   rowCounter = 0
   4.times do
     arrayPositionCounter = 2+rowCounter
-    isShifted = resetIsShifted(isShifted)
+    isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
     until arrayPositionCounter == -1+rowCounter do
 
       #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
@@ -74,9 +65,21 @@ def shiftRight(field)
         if field[arrPosC_plus_MoveTo] > 0
           #If the number in the field and current "to-move"-field is the same; merge them together
           if field[arrayPositionCounter] == field[arrPosC_plus_MoveTo] 
-            field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
-            break
+            if isShifted[arrPosC_plus_MoveTo] == 0
+              field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
+              field[arrayPositionCounter] = 0
+              isShifted[arrPosC_plus_MoveTo] = 1
+              break
+            else
+              if isShifted[arrPosC_plus_MoveTo] == 1
+                if arrPosC_plus_MoveTo-1 != arrayPositionCounter
+                  field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
+                  field[arrayPositionCounter] = 0
+                  isShifted[arrPosC_plus_MoveTo] = 1
+                end
+                break
+              end
+            end
           #Else if there is a number but not the same; move to the field infront of the already taken one
           else
             #If the "to-move" field is the field infront of the next field with a value; do nothing
