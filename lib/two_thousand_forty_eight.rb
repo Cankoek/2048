@@ -22,11 +22,11 @@ For visualization purposes: Create a new function drawing the array in a fancy w
 
 To-do:
   Add basic game logic 
-  Add moveRight, moveLeft #Done
-  Add moveUp, moveDown  #Done
+  Add moveRight, moveLeft                                   #Done
+  Add moveUp, moveDown                                      #Done
   Add function to create random numbers at random spots
-  Add a basic UI for testing #Done
-  Add user input
+  Add a basic UI for testing                                #Done
+  Add user input                                            #Done
   Improve move functions & overall game logic
   Improve the UI
   Add win condition at 2048
@@ -353,6 +353,9 @@ def userInput()
     end
   end
   return input
+end
+
+def checkWin()
 end
 
 #UI
