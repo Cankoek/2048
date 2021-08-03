@@ -33,19 +33,34 @@ To-do:
   Add a points counter
 """
 
-#Game functions
 class Game
   def initialize()
-    fieldArray = [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0]
+    gridArray = [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0]
     2.times do
-      fieldArray = addRandomNumber(fieldArray)
+      gridArray = addRandomNumber(gridArray)
     end
-    
+    drawGrid(gridArray)
+    print("\n")
+    gridArray = shiftRight(gridArray)
+    gridArray = addRandomNumber(gridArray)
+    drawGrid(gridArray)
+    print("\n")
+    gridArray = shiftLeft(gridArray)
+    gridArray = addRandomNumber(gridArray)
+    drawGrid(gridArray)
+    print("\n")
+    gridArray = shiftDown(gridArray)
+    gridArray = addRandomNumber(gridArray)
+    drawGrid(gridArray)
+    print("\n")
+    gridArray = shiftUp(gridArray)
+    gridArray = addRandomNumber(gridArray)
+    drawGrid(gridArray)
+    print("\n")
   end
 
   #Game Functions
-
-  def shiftRight(field)
+  def shiftRight(grid)
     rowCounter = 0
     4.times do
       arrayPositionCounter = 2+rowCounter
@@ -63,19 +78,19 @@ class Game
           end
 
           #Checks if any field to the right contains a number
-          if field[arrPosC_plus_MoveTo] > 0
+          if grid[arrPosC_plus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
-            if field[arrayPositionCounter] == field[arrPosC_plus_MoveTo] 
+            if grid[arrayPositionCounter] == grid[arrPosC_plus_MoveTo] 
               if isShifted[arrPosC_plus_MoveTo] == 0
-                field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
+                grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_plus_MoveTo] = 1
                 break
               else
                 if isShifted[arrPosC_plus_MoveTo] == 1
                   if arrPosC_plus_MoveTo-1 != arrayPositionCounter
-                    field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
-                    field[arrayPositionCounter] = 0
+                    grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
+                    grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_plus_MoveTo] = 1
                   end
                   break
@@ -85,8 +100,8 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_plus_MoveTo-1 != arrayPositionCounter
-                field[arrPosC_plus_MoveTo-1] = field[arrayPositionCounter] 
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
+                grid[arrayPositionCounter] = 0
               end
               break
             end
@@ -94,8 +109,8 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            field[3+rowCounter] = field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
+            grid[3+rowCounter] = grid[arrayPositionCounter]
+            grid[arrayPositionCounter] = 0
             break
           end
         end
@@ -109,10 +124,10 @@ class Game
         rowCounter += 4
       end
     end
-    return field
+    return grid
   end
 
-  def shiftLeft(field)
+  def shiftLeft(grid)
     rowCounter = 0
     4.times do
       arrayPositionCounter = 1+rowCounter
@@ -126,19 +141,19 @@ class Game
           arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
 
           #Checks if any field to the left contains a number
-          if field[arrPosC_minus_MoveTo] > 0
+          if grid[arrPosC_minus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
-            if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
+            if grid[arrayPositionCounter] == grid[arrPosC_minus_MoveTo] 
               if isShifted[arrPosC_minus_MoveTo] == 0
-                field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
+                grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_minus_MoveTo] = 1
                 break
               else
                 if isShifted[arrPosC_minus_MoveTo] == 1
                   if arrPosC_minus_MoveTo+1 != arrayPositionCounter
-                    field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter] 
-                    field[arrayPositionCounter] = 0
+                    grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter] 
+                    grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_minus_MoveTo] = 1
                   end
                   break
@@ -148,8 +163,8 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_minus_MoveTo+1 != arrayPositionCounter
-                field[arrPosC_minus_MoveTo+1] = field[arrayPositionCounter]
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter]
+                grid[arrayPositionCounter] = 0
               end
               break
             end
@@ -157,8 +172,8 @@ class Game
           #If there is no number to the left, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            field[rowCounter] = field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
+            grid[rowCounter] = grid[arrayPositionCounter]
+            grid[arrayPositionCounter] = 0
             
             break
           end
@@ -173,10 +188,10 @@ class Game
         rowCounter += 4
       end
     end
-    return field
+    return grid
   end
 
-  def shiftDown(field)
+  def shiftDown(grid)
     columnCounter = 0
     4.times do
       arrayPositionCounter = 8+columnCounter
@@ -204,19 +219,19 @@ class Game
           end
 
           #Checks if any field to the right contains a number
-          if field[arrPosC_plus_MoveTo] > 0
+          if grid[arrPosC_plus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
-            if field[arrayPositionCounter] == field[arrPosC_plus_MoveTo] 
+            if grid[arrayPositionCounter] == grid[arrPosC_plus_MoveTo] 
               if isShifted[arrPosC_plus_MoveTo] == 0
-                field[arrPosC_plus_MoveTo] = 2*field[arrayPositionCounter]
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
+                grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_plus_MoveTo] = 1
                 break
               else
                 if isShifted[arrPosC_plus_MoveTo] == 1
                   if arrPosC_plus_MoveTo-4 != arrayPositionCounter
-                    field[arrPosC_plus_MoveTo-4] = field[arrayPositionCounter] 
-                    field[arrayPositionCounter] = 0
+                    grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
+                    grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_plus_MoveTo] = 1
                   end
                   break
@@ -226,8 +241,8 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_plus_MoveTo-4 != arrayPositionCounter
-                field[arrPosC_plus_MoveTo-4] = field[arrayPositionCounter] 
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
+                grid[arrayPositionCounter] = 0
               end
               break
             end
@@ -235,8 +250,8 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
-            field[12+columnCounter] = field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
+            grid[12+columnCounter] = grid[arrayPositionCounter]
+            grid[arrayPositionCounter] = 0
             break
           end
         end
@@ -250,10 +265,10 @@ class Game
           columnCounter += 1
       end
     end
-    return field
+    return grid
   end
 
-  def shiftUp(field)
+  def shiftUp(grid)
     columnCounter = 0
     4.times do
       arrayPositionCounter = 4+columnCounter
@@ -269,19 +284,19 @@ class Game
           arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
 
           #Checks if any field to the right contains a number
-          if field[arrPosC_minus_MoveTo] > 0
+          if grid[arrPosC_minus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
-            if field[arrayPositionCounter] == field[arrPosC_minus_MoveTo] 
+            if grid[arrayPositionCounter] == grid[arrPosC_minus_MoveTo] 
               if isShifted[arrPosC_minus_MoveTo] == 0
-                field[arrPosC_minus_MoveTo] = 2*field[arrayPositionCounter]
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
+                grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_minus_MoveTo] = 1
                 break
               else
                 if isShifted[arrPosC_minus_MoveTo] == 1
                   if arrPosC_minus_MoveTo+4 != arrayPositionCounter
-                    field[arrPosC_minus_MoveTo+4] = field[arrayPositionCounter] 
-                    field[arrayPositionCounter] = 0
+                    grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
+                    grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_minus_MoveTo] = 1
                   end
                   break
@@ -291,8 +306,8 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_minus_MoveTo+4 != arrayPositionCounter
-                field[arrPosC_minus_MoveTo+4] = field[arrayPositionCounter] 
-                field[arrayPositionCounter] = 0
+                grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
+                grid[arrayPositionCounter] = 0
               end
               break
             end
@@ -300,8 +315,8 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
-            field[columnCounter] = field[arrayPositionCounter]
-            field[arrayPositionCounter] = 0
+            grid[columnCounter] = grid[arrayPositionCounter]
+            grid[arrayPositionCounter] = 0
             break
           end
         end
@@ -315,7 +330,7 @@ class Game
           columnCounter += 1
       end
     end
-    return field
+    return grid
   end
 
   def generateRandomInt()
@@ -329,15 +344,15 @@ class Game
     return ranInt
   end
 
-  def addRandomNumber(field)
+  def addRandomNumber(grid)
     while true
       randvalue = rand(0..15)
-      if field[randvalue] == 0
-        field[randvalue] = generateRandomInt()
+      if grid[randvalue] == 0
+        grid[randvalue] = generateRandomInt()
         break
       end
     end
-    return field
+    return grid
   end
 
   def userInput()
@@ -355,20 +370,19 @@ class Game
     return input
   end
 
-  def checkWin(field)
-    if field.include? 2048
+  def checkWin(grid)
+    if grid.include? 2048
       return true
     end
     return false
   end
 
   #User Interface
-
-  def drawField(field)
+  def drawGrid(grid)
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
-      print(field[counter])
+      print(grid[counter])
       print(" | ")
       if counter == 3 or counter == 7 or counter == 11 or counter == 15
         print("\n")
