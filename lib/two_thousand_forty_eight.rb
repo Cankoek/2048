@@ -401,13 +401,13 @@ class Game
     #Check for every position if it has a neighbour which has the same value
     counter = 0
     16.times do
-      if counter < 15
+      if counter < 15 && counter != 3 && counter != 7 && counter != 11
         plusone = counter + 1
         if grid[plusone] == grid[counter]
           return false
         end
       end
-      if counter > 0
+      if counter > 0 && counter != 4 && counter != 8 && counter != 12
         minusone = counter - 1
         if grid[minusone] == grid[counter]
           return false
@@ -432,7 +432,8 @@ class Game
   
   #User Interface
   def drawGrid(grid)
-    system "clear"
+    #system "clear"
+    print("\n")
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
