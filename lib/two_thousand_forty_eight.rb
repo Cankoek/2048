@@ -355,7 +355,11 @@ def userInput()
   return input
 end
 
-def checkWin()
+def checkWin(field)
+  if field.include? 2048
+    return true
+  end
+  return false
 end
 
 #UI
