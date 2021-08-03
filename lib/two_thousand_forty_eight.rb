@@ -22,10 +22,10 @@ For visualization purposes: Create a new function drawing the array in a fancy w
 
 To-do:
   Add basic game logic 
-  Add moveRight, moveLeft #moveRight done
-  Add moveUp, moveDown
+  Add moveRight, moveLeft #Done
+  Add moveUp, moveDown  #Done
   Add function to create random numbers at random spots
-  Add a basic UI for testing
+  Add a basic UI for testing #Done
   Add user input
   Improve move functions & overall game logic
   Improve the UI
@@ -36,11 +36,20 @@ To-do:
 #Game functions
 
 def game()
-  fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,4,0,2] 
+  fieldArray = [8,8,0,0 ,0,2,0,2 ,4,2,2,2 ,2,2,2,2] 
   drawField(fieldArray)
   print("\n")
-  drawField(shiftUp(fieldArray))
+  drawField(shiftRight(fieldArray))
   return
+end
+
+def resetIsShifted(isShifted)
+  counter = 0
+  16.times do
+    isShifted[counter] = 0
+    counter += 1
+  end
+  return isShifted
 end
 
 def shiftRight(field)
