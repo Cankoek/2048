@@ -21,16 +21,17 @@ Moves just calculate the new position on for each number on the array.
 For visualization purposes: Create a new function drawing the array in a fancy way, add a points counter.
 
 To-do:
-  Add basic game logic 
+  Add basic game logic                                      #Partially done
   Add moveRight, moveLeft                                   #Done
   Add moveUp, moveDown                                      #Done
-  Add function to create random numbers at random spots
+  Add function to create random numbers at random spots     #Done
   Add a basic UI for testing                                #Done
   Add user input                                            #Done
   Improve move functions & overall game logic
   Improve the UI
   Add win condition at 2048                                 #Done
   Add a points counter
+  Add check if anything moves
 """
 
 class Game
@@ -39,24 +40,31 @@ class Game
     2.times do
       gridArray = addRandomNumber(gridArray)
     end
-    drawGrid(gridArray)
-    print("\n")
-    gridArray = shiftRight(gridArray)
-    gridArray = addRandomNumber(gridArray)
-    drawGrid(gridArray)
-    print("\n")
-    gridArray = shiftLeft(gridArray)
-    gridArray = addRandomNumber(gridArray)
-    drawGrid(gridArray)
-    print("\n")
-    gridArray = shiftDown(gridArray)
-    gridArray = addRandomNumber(gridArray)
-    drawGrid(gridArray)
-    print("\n")
-    gridArray = shiftUp(gridArray)
-    gridArray = addRandomNumber(gridArray)
-    drawGrid(gridArray)
-    print("\n")
+    routine(gridArray)
+  end
+
+  #Game Routine
+  def routine(grid)
+    while true
+      drawGrid(grid)
+      direction = userInput()
+      if direction.downcase == "w"
+        grid = shiftUp(grid)
+        grid = addRandomNumber(grid)
+      end
+      if direction.downcase == "a"
+        grid = shiftLeft(grid)
+        grid = addRandomNumber(grid)
+      end
+      if direction.downcase == "s"
+        grid = shiftDown(grid)
+        grid = addRandomNumber(grid)
+      end
+      if direction.downcase == "d"
+        grid = shiftRight(grid)
+        grid = addRandomNumber(grid)
+      end
+    end
   end
 
   #Game Functions
@@ -363,7 +371,6 @@ class Game
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d"
         break
       else
-        system "clear"
         puts("Invalid Input. Try again.")
       end
     end
@@ -379,6 +386,7 @@ class Game
 
   #User Interface
   def drawGrid(grid)
+    system "clear"
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
