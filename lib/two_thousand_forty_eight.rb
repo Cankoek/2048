@@ -50,7 +50,7 @@ class Game
       when 's' 
         grid = shiftDown(grid)
       when 'd'
-        grid = LRshift(grid,direction)
+        grid = shiftRight(grid)
       end
 
       if checkWin(grid) == true
@@ -108,20 +108,22 @@ class Game
             if grid[tilePosition] == grid[moveToPosition]   #If both fields contain the same number
               if alreadyMerged[moveToPosition] == 0       #If the tile (where to move) has not merged yet
                 grid = merge(grid, tilePosition, moveToPosition)
-                alreadyMerged[moveToPosition] = 1
+                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+
                 break
               elsif alreadyMerged[moveToPosition] == 1
                 if tileInfront != tilePosition  #if Tile infront is not the same as tilePosition
                   grid = moveInfront(grid, tilePosition, tileInfront)
+                  @somethingMoved = 1
                 end
                 break
               end            
             else
               if grid[moveToPosition] != 0
                 if tileInfront != tilePosition
-                  print(tileInfront, tilePosition)
                   if tilePosition != 0
                     grid = moveInfront(grid, tilePosition, tileInfront)
+                    @somethingMoved
                   end
                 end
               end
@@ -132,6 +134,7 @@ class Game
           if moveToCounter == 4
             if tilePosition != 0
               grid = moveToBack(grid,tilePosition, lastPosition)
+              @somethingMoved = 1
               break
             end
           end
@@ -155,89 +158,76 @@ class Game
   def merge(grid,tilePosition, moveToPosition)
     grid[moveToPosition] = 2*grid[tilePosition]
     grid[tilePosition] = 0
-    @somethingMoved = 1
     return grid
   end
 
   def moveInfront(grid, tilePosition, tileInfront)
-    grid[tileInfront] = grid[tilePosition] 
-    grid[tilePosition] = 0
-    @somethingMoved = 1
+    if tileInfront != tilePosition
+      grid[tileInfront] = grid[tilePosition] 
+      grid[tilePosition] = 0
+    end
     return grid
   end
 
   def moveToBack(grid, tilePosition, lastPosition)
     grid[lastPosition] = grid[tilePosition]
     grid[tilePosition] = 0
-    @somethingMoved = 1
     return grid
   end
 
   def shiftRight(grid)
     rowCounter = 0
     4.times do
-      arrayPositionCounter = 2+rowCounter
-      isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
-      until arrayPositionCounter == -1+rowCounter do
+      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
+      tilePosition = 2+rowCounter
+      maxTile = -1+rowCounter
+      lastPosition = 3+rowCounter
 
-        #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      until tilePosition == maxTile do
+
         moveToCounter = 1
         4.times do
+          moveToPosition = tilePosition+moveToCounter
+          if moveToPosition > 15 then moveToPosition = 15 end
+          tileInfront = moveToPosition-1
 
-          #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
-          arrPosC_plus_MoveTo = arrayPositionCounter+moveToCounter
-          if arrPosC_plus_MoveTo >= 16
-            arrPosC_plus_MoveTo = 15
-          end
-
-          #Checks if any field to the right contains a number
-          if grid[arrPosC_plus_MoveTo] > 0
-            #If the number in the field and current "to-move"-field is the same; merge them together
-            if grid[arrayPositionCounter] == grid[arrPosC_plus_MoveTo] 
-              if isShifted[arrPosC_plus_MoveTo] == 0
-                grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
-                grid[arrayPositionCounter] = 0
-                isShifted[arrPosC_plus_MoveTo] = 1
-                @somethingMoved = 1
-                break
+          if grid[moveToPosition] > 0
+            if grid[moveToPosition] == grid[tilePosition] 
+              if alreadyMerged[moveToPosition] == 0
+                grid = merge(grid, tilePosition, moveToPosition)
+                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+                break 
               else
-                if isShifted[arrPosC_plus_MoveTo] == 1
-                  if arrPosC_plus_MoveTo-1 != arrayPositionCounter
-                    grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
-                    grid[arrayPositionCounter] = 0
-                    isShifted[arrPosC_plus_MoveTo] = 1
+                if alreadyMerged[moveToPosition] == 1
+                  if tileInfront != tilePosition
+                    grid = moveInfront(grid, tilePosition, tileInfront)
                     @somethingMoved = 1
                   end
                   break
                 end
               end
-            #Else if there is a number but not the same; move to the field infront of the already taken one
             else
-              #If the "to-move" field is the field infront of the next field with a value; do nothing
-              if arrPosC_plus_MoveTo-1 != arrayPositionCounter
-                if grid[arrayPositionCounter] != 0
-                  grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
-                  grid[arrayPositionCounter] = 0
+              if tileInfront != tilePosition
+                if grid[tilePosition] != 0
+                  grid = moveInfront(grid, tilePosition, tileInfront)
                   @somethingMoved = 1
                 end
               end
               break
             end
           end
-          #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            if grid[arrayPositionCounter] != 0
-              grid[3+rowCounter] = grid[arrayPositionCounter]
-              grid[arrayPositionCounter] = 0
+            if grid[tilePosition] != 0
+              moveToBack(grid, tilePosition,lastPosition)
               @somethingMoved = 1
               break
             end
           end
         end
         #Checks the min arrayPosCounter for each row
-        if arrayPositionCounter != -1+rowCounter
-          arrayPositionCounter -= 1
+        if tilePosition != maxTile
+          tilePosition -= 1
         end
       end
       #Makes sure that rowCounter has a maximum value of 12
