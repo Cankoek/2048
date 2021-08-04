@@ -46,7 +46,7 @@ class Game
       when 'w'
         grid = shiftUp(grid)
       when 'a'
-        grid = LRshift(grid,direction)
+        grid = shiftLeft(grid)
       when 's' 
         grid = shiftDown(grid)
       when 'd'
@@ -225,12 +225,10 @@ class Game
             end
           end
         end
-        #Checks the min arrayPosCounter for each row
         if tilePosition != maxTile
           tilePosition -= 1
         end
       end
-      #Makes sure that rowCounter has a maximum value of 12
       if rowCounter != 12
         rowCounter += 4
       end
@@ -241,67 +239,58 @@ class Game
   def shiftLeft(grid)
     rowCounter = 0
     4.times do
-      arrayPositionCounter = 1+rowCounter
-      isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
-      until arrayPositionCounter == 4+rowCounter do
+      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      tilePosition = 1+rowCounter
+      maxTile = 4+rowCounter
+      lastPosition = rowCounter
 
-        #Check if there's a number to the left, if so; check which number. If its the same; merge else stay. If not, move number and reset field
+      until tilePosition == maxTile do
+
         moveToCounter = 1
         4.times do
-          #New variable to fix an issue with array length; Without Ruby wouldnt work because theres an if-check checking an out of range array index
-          arrPosC_minus_MoveTo = arrayPositionCounter-moveToCounter
 
-          #Checks if any field to the left contains a number
-          if grid[arrPosC_minus_MoveTo] > 0
-            #If the number in the field and current "to-move"-field is the same; merge them together
-            if grid[arrayPositionCounter] == grid[arrPosC_minus_MoveTo] 
-              if isShifted[arrPosC_minus_MoveTo] == 0
-                grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
-                grid[arrayPositionCounter] = 0
-                isShifted[arrPosC_minus_MoveTo] = 1
-                @somethingMoved = 1
-                break
+          moveToPosition = tilePosition-moveToCounter
+          if moveToPosition > 15 then moveToPosition = 15 end
+          tileInfront = moveToPosition+1
+
+          if grid[moveToPosition] > 0
+            if grid[tilePosition] == grid[moveToPosition] 
+              if alreadyMerged[moveToPosition] == 0
+                grid = merge(grid, tilePosition, moveToPosition)
+                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+                break 
               else
-                if isShifted[arrPosC_minus_MoveTo] == 1
-                  if arrPosC_minus_MoveTo+1 != arrayPositionCounter
-                    grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter] 
-                    grid[arrayPositionCounter] = 0
-                    isShifted[arrPosC_minus_MoveTo] = 1
+                if alreadyMerged[moveToPosition] == 1
+                  if tileInfront != tilePosition
+                    grid = moveInfront(grid, tilePosition, tileInfront)
                     @somethingMoved = 1
                   end
                   break
                 end
               end
-            #Else if there is a number but not the same; move to the field infront of the already taken one
             else
-              #If the "to-move" field is the field infront of the next field with a value; do nothing
-              if arrPosC_minus_MoveTo+1 != arrayPositionCounter
-                if grid[arrayPositionCounter] != 0
-                  grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter]
-                  grid[arrayPositionCounter] = 0
+              if tileInfront != tilePosition
+                if grid[tilePosition] != 0
+                  grid = moveInfront(grid, tilePosition, tileInfront)
                   @somethingMoved = 1
                 end
               end
               break
             end
           end
-          #If there is no number to the left, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            if grid[arrayPositionCounter] != 0
-              grid[rowCounter] = grid[arrayPositionCounter]
-              grid[arrayPositionCounter] = 0
+            if grid[tilePosition] != 0
+              moveToBack(grid, tilePosition,lastPosition)
               @somethingMoved = 1
               break
             end
           end
         end
-        #Checks the max arrayPosCounter for each row
-        if arrayPositionCounter != 4+rowCounter
-          arrayPositionCounter += 1
+        if tilePosition != maxTile
+          tilePosition += 1
         end
       end
-      #Makes sure that rowCounter has a maximum value of 12
       if rowCounter != 12
         rowCounter += 4
       end
@@ -313,7 +302,7 @@ class Game
     columnCounter = 0
     4.times do
       arrayPositionCounter = 8+columnCounter
-      isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
       #Checks min ArrPos
       until arrayPositionCounter == -4+columnCounter do
 
@@ -340,19 +329,19 @@ class Game
           if grid[arrPosC_plus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
             if grid[arrayPositionCounter] == grid[arrPosC_plus_MoveTo] 
-              if isShifted[arrPosC_plus_MoveTo] == 0
+              if alreadyMerged[arrPosC_plus_MoveTo] == 0
                 grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
-                isShifted[arrPosC_plus_MoveTo] = 1
+                alreadyMerged[arrPosC_plus_MoveTo] = 1
                 @somethingMoved = 1
                 break
               else
-                if isShifted[arrPosC_plus_MoveTo] == 1
+                if alreadyMerged[arrPosC_plus_MoveTo] == 1
                   if arrPosC_plus_MoveTo-4 != arrayPositionCounter
                     if grid[arrayPositionCounter] != 0
                       grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
                       grid[arrayPositionCounter] = 0
-                      isShifted[arrPosC_plus_MoveTo] = 1
+                      alreadyMerged[arrPosC_plus_MoveTo] = 1
                       @somethingMoved = 1
                     end
                   end
@@ -400,7 +389,7 @@ class Game
     columnCounter = 0
     4.times do
       arrayPositionCounter = 4+columnCounter
-      isShifted = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
       #Checks max ArrPos
       until arrayPositionCounter == 16+columnCounter do
 
@@ -415,19 +404,19 @@ class Game
           if grid[arrPosC_minus_MoveTo] > 0
             #If the number in the field and current "to-move"-field is the same; merge them together
             if grid[arrayPositionCounter] == grid[arrPosC_minus_MoveTo] 
-              if isShifted[arrPosC_minus_MoveTo] == 0
+              if alreadyMerged[arrPosC_minus_MoveTo] == 0
                 grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
-                isShifted[arrPosC_minus_MoveTo] = 1
+                alreadyMerged[arrPosC_minus_MoveTo] = 1
                 @somethingMoved = 1
                 break
               else
-                if isShifted[arrPosC_minus_MoveTo] == 1
+                if alreadyMerged[arrPosC_minus_MoveTo] == 1
                   if arrPosC_minus_MoveTo+4 != arrayPositionCounter
                     if grid[arrayPositionCounter] != 0
                       grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
                       grid[arrayPositionCounter] = 0
-                      isShifted[arrPosC_minus_MoveTo] = 1
+                      alreadyMerged[arrPosC_minus_MoveTo] = 1
                       @somethingMoved = 1
                     end
                   end
