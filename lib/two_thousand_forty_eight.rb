@@ -106,7 +106,14 @@ class Game
     grid[TilePosition] = 0
     return grid
   end
-  
+
+  def moveInfront(grid, TilePosition, moveToPosition, TileInfront)
+    grid[TileInfront] = grid[TilePosition] 
+    grid[TilePosition] = 0
+    @somethingMoved = 1
+    return grid
+  end
+
   def shiftRight(grid)
     rowCounter = 0
     4.times do
