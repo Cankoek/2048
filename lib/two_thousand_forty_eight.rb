@@ -24,8 +24,6 @@ end
 #    Add win condition at 2048                                 #Done
 
 
-
-
 class Game
   def initialize()
     @somethingMoved = 0
@@ -69,7 +67,40 @@ class Game
     end
   end
 
-  #Game Functions
+#-------------------------------------------------------------------------------------------------------------
+  #-Game Functions-
+
+  #Shift Functions
+  def LRshift(grid, direction)
+    case direction
+    #Right direction values
+    when direction == 0
+    numb1 = 2
+    numb2 = -1
+    #Left direction values
+    when direction == 1
+
+    numb1 = -1
+    numb2 = 
+
+  rowCounter = 0
+  4.times do
+    TilePosition = numb1+rowCounter 
+    isShifted = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+    until TilePosition == numb2+rowCounter do
+        case direction
+        when direction == 0
+            moveToPosition = TilePosition + moveToCounter
+            if moveToPosition > 15 then moveToPosition = 15 end
+        when
+            direction == 1
+            moveToPosition = TilePosition - moveToCounter
+        end
+      end
+    end
+  end
+  
   def shiftRight(grid)
     rowCounter = 0
     4.times do
@@ -377,6 +408,7 @@ class Game
     return grid
   end
 
+  #Help functions
   def generateRandomInt()
     #Generates either 2 or 4 | 90%/10%
     return ranInt = rand(0.0..1.0) < 0.9 ? 2 : 4
@@ -458,6 +490,7 @@ class Game
     return true
   end
   
+#-------------------------------------------------------------------------------------------------------------
   #User Interface
   def drawGrid(grid)
     #system "clear"
