@@ -438,7 +438,17 @@ class Game
     counter = 0
     #Prints the 16 entries of the fieldArray
     16.times do
-      print("[ ",grid[counter], " ] ")
+      if grid[counter] == 0
+        print("[    ", "] ")
+      elsif grid[counter] > 0 && grid[counter] < 10
+        print("[   ",grid[counter], "] ")
+      elsif grid[counter] >= 10 && grid[counter] < 100
+        print("[  ",grid[counter], "] ")
+      elsif grid[counter] >= 100 && grid[counter] < 1000
+        print("[ ",grid[counter], "] ")
+      elsif grid[counter] >= 1000
+        print("[",grid[counter], "] ")
+      end
       if counter == 3 or counter == 7 or counter == 11 or counter == 15
         print("\n")
       end
