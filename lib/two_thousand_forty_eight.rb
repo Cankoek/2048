@@ -378,13 +378,9 @@ class Game
   end
 
   def generateRandomInt()
-    #10% probability of a 4 generating, else 2
+    #Generates either 2 or 4 | 90%/10%
     ranInt = rand(0.0..1.0)
-    if ranInt < 0.9 
-      ranInt = 2
-    else
-      ranInt = 4
-    end
+    ranInt = ranInt < 0.9 ? 2 : 4
     return ranInt
   end
 
