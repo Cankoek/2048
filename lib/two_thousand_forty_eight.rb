@@ -107,9 +107,16 @@ class Game
     return grid
   end
 
-  def moveInfront(grid, TilePosition, moveToPosition, TileInfront)
+  def moveInfront(grid, TilePosition, TileInfront)
     grid[TileInfront] = grid[TilePosition] 
     grid[TilePosition] = 0
+    @somethingMoved = 1
+    return grid
+  end
+
+  def moveToBack(grid, TilePosition, lastPosition)
+    grid[lastPosition] = grid[arrayPositionCounter]
+    grid[arrayPositionCounter] = 0
     @somethingMoved = 1
     return grid
   end
