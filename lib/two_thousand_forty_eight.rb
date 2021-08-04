@@ -379,9 +379,7 @@ class Game
 
   def generateRandomInt()
     #Generates either 2 or 4 | 90%/10%
-    ranInt = rand(0.0..1.0)
-    ranInt = ranInt < 0.9 ? 2 : 4
-    return ranInt
+    return ranInt = rand(0.0..1.0) < 0.9 ? 2 : 4
   end
 
   def addRandomNumber(grid)
