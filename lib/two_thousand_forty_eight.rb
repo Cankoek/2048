@@ -5,48 +5,42 @@ module TwoThousandFortyEight
   end
 end
 
-"""
-Idea:
-Initialize Array with 16 entries 'visualizing' the 16 squares for the numbers.
-Moves just calculate the new position on for each number on the array.
-->  If a number collides with another while moving: 
-    Check if the number's the same, if so, merge.
-    Else just put the currently moving number behind the other
+#-------------------------------------------------------------------------------------------------------------
+#To-do:
+#    Add a check if something moved
+#    Reorganize Code
+#    Add better classes
+#    Add a points counter
+#    Improve move functions & overall game logic
 
-    Example; moveRight()
-    2 | 2 | 0 | 4 >>  0 | 0 | 4 | 4
-    2 | 2 | 0 | 0 >>  0 | 0 | 0 | 4
-    2 | 0 | 0 | 8 >>  0 | 0 | 2 | 8
+# Already Done:
+#    Add basic game logic                                      #Done
+#    Add moveRight, moveLeft                                   #Done
+#    Add moveUp, moveDown                                      #Done
+#    Add function to create random numbers at random spots     #Done
+#    Add a basic UI for testing                                #Done
+#    Add user input                                            #Done
+#    Improve the UI                                            #Done
+#    Add win condition at 2048                                 #Done
 
-For visualization purposes: Create a new function drawing the array in a fancy way, add a points counter.
 
-To-do:
-  Add basic game logic                                      #Partially done
-  Add moveRight, moveLeft                                   #Done
-  Add moveUp, moveDown                                      #Done
-  Add function to create random numbers at random spots     #Done
-  Add a basic UI for testing                                #Done
-  Add user input                                            #Done
-  Improve move functions & overall game logic
-  Improve the UI                                            #Done
-  Add win condition at 2048                                 #Done
-  Add a points counter
-  Add check if anything moves
-"""
+
 
 class Game
   def initialize()
+    @somethingMoved = 0
     gridArray = [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0]
     2.times do
       gridArray = addRandomNumber(gridArray)
     end
+    
     routine(gridArray)
   end
 
   #Game Routine
   def routine(grid)
     while true
-      oldGrid = grid
+      @somethingMoved = 0
       drawGrid(grid)
       direction = userInput()
 
@@ -68,7 +62,10 @@ class Game
         print("\nYou lost.")
         break
       end
-      grid = addRandomNumber(grid)
+      if @somethingMoved == 1
+        grid = addRandomNumber(grid)
+      end
+      sleep(0.01)
     end
   end
 
@@ -98,6 +95,7 @@ class Game
                 grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_plus_MoveTo] = 1
+                @somethingMoved = 1
                 break
               else
                 if isShifted[arrPosC_plus_MoveTo] == 1
@@ -105,6 +103,7 @@ class Game
                     grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
                     grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_plus_MoveTo] = 1
+                    @somethingMoved = 1
                   end
                   break
                 end
@@ -113,8 +112,11 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_plus_MoveTo-1 != arrayPositionCounter
-                grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
-                grid[arrayPositionCounter] = 0
+                if grid[arrayPositionCounter] != 0
+                  grid[arrPosC_plus_MoveTo-1] = grid[arrayPositionCounter] 
+                  grid[arrayPositionCounter] = 0
+                  @somethingMoved = 1
+                end
               end
               break
             end
@@ -122,9 +124,12 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            grid[3+rowCounter] = grid[arrayPositionCounter]
-            grid[arrayPositionCounter] = 0
-            break
+            if grid[arrayPositionCounter] != 0
+              grid[3+rowCounter] = grid[arrayPositionCounter]
+              grid[arrayPositionCounter] = 0
+              @somethingMoved = 1
+              break
+            end
           end
         end
         #Checks the min arrayPosCounter for each row
@@ -187,7 +192,6 @@ class Game
           if moveToCounter == 4
             grid[rowCounter] = grid[arrayPositionCounter]
             grid[arrayPositionCounter] = 0
-            
             break
           end
         end
@@ -375,12 +379,10 @@ class Game
   def userInput()
     puts("w:Up a:Left s:Down d:Right\n")
     while true
-      
       system("stty raw -echo")
       input = STDIN.getc.chr
       print(input)
       system("stty -raw echo")
-    
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d"
         break
       else
@@ -440,7 +442,7 @@ class Game
     #system "clear"
     print("\n")
     counter = 0
-    #Prints the 16 entries of the fieldArray
+    #Draws the grids
     16.times do
       if grid[counter] == 0
         print("[    ", "] ")
@@ -459,7 +461,6 @@ class Game
       counter += 1
     end
     print("\n")
-    return
   end
 
 end
