@@ -46,11 +46,11 @@ class Game
       when 'w'
         grid = shiftUp(grid)
       when 'a'
-        grid = shiftLeft(grid)
+        grid = LRshift(grid,direction)
       when 's' 
         grid = shiftDown(grid)
       when 'd'
-        grid = shiftRight(grid)
+        grid = LRshift(grid,direction)
       end
 
       if checkWin(grid) == true
@@ -71,52 +71,129 @@ class Game
   #-Game Functions-
 
   #Shift Functions
+
   def LRshift(grid, direction)
-    case direction
+    case direction.downcase
     #Right direction values
-    when direction == 0
+    when 'd'
     numb1 = 2
     numb2 = -1
+    numb3 = 3
+
     #Left direction values
-    when direction == 1
-
+    when 'a'
     numb1 = -1
-    numb2 = 
-
+    numb2 = 4
+    numb3 = 1
+    end
     rowCounter = 0
-    4.times do
-      TilePosition = numb1+rowCounter 
-      isShifted = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-      until TilePosition == numb2+rowCounter do
-        case direction
-        when direction == 0
-            moveToPosition = TilePosition + moveToCounter
+    4.times do
+      tilePosition = numb1+rowCounter 
+      alreadyMerged= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+      case direction
+      when 'd'
+        maxTile = -1+rowCounter
+      when 'a'
+        maxTile = 4+rowCounter
+      end
+
+      until tilePosition == maxTile do
+
+        moveToCounter = 1
+        4.times do
+          case direction.downcase
+          when 'd'
+            moveToPosition = tilePosition + moveToCounter
             if moveToPosition > 15 then moveToPosition = 15 end
-        when
-            direction == 1
-            moveToPosition = TilePosition - moveToCounter
+          when 'a'
+            moveToPosition = tilePosition - moveToCounter
+          end
+
+
+          if grid[moveToPosition] > 0                         #If field is not empty
+            if grid[tilePosition] == grid[moveToPosition]   #If both fields contain the same number
+              if alreadyMerged[moveToPosition] == 0       #If the tile (where to move) has not merged yet
+                grid = merge(grid, tilePosition, moveToPosition)
+                alreadyMerged[moveToPosition] = 1
+                break
+              elsif alreadyMerged[moveToPosition] == 1
+                case direction.downcase
+                when 'd'
+                  tileInfront = moveToPosition - 1
+                when 'a'
+                  tileInfront = moveToPosition + 1
+                end
+                if tileInfront != tilePosition  #if Tile infront is not the same as tilePosition
+                  grid = moveInfront(grid, tilePosition, tileInfront)
+                end
+                break
+              end            
+            else
+              case direction.downcase
+              when 'd'
+                tileInfront = moveToPosition - 1
+              when 'a'
+                tileInfront = moveToPosition + 1
+              end
+
+              if tileInfront != tilePosition
+                if tilePosition != 0
+                  grid = moveInfront(grid, tilePosition, tileInfront)
+                end
+              end
+              break
+            end
+          end
+
+          moveToCounter += 1
+          if moveToCounter == 4
+            if tilePosition != 0
+              case direction.downcase
+              when 'd'
+                lastPosition = numb3 + rowCounter
+              when 'a'
+                lastPosition = rowCounter
+              end
+              grid = moveToBack(grid,tilePosition, lastPosition)
+              break
+            end
+          end
+        end
+        if tilePosition != numb2+rowCounter
+          case direction.downcase
+          when 'd'
+            tilePosition -= 1
+          when 'a'
+            tilePosition += 1
+          end
         end
       end
+      if rowCounter != 12
+        rowCounter += 4
+      end
     end
-  end
-
-  def merge(Grid,TilePosition, moveToPosition)
-    grid[moveToPosition] = 2*grid[TilePosition]
-    grid[TilePosition] = 0
     return grid
   end
 
-  def moveInfront(grid, TilePosition, TileInfront)
-    grid[TileInfront] = grid[TilePosition] 
-    grid[TilePosition] = 0
+  def merge(grid,tilePosition, moveToPosition)
+    grid[moveToPosition] = 2*grid[tilePosition]
+    grid[tilePosition] = 0
     @somethingMoved = 1
     return grid
   end
 
-  def moveToBack(grid, TilePosition, lastPosition)
-    grid[lastPosition] = grid[arrayPositionCounter]
-    grid[arrayPositionCounter] = 0
+  def moveInfront(grid, tilePosition, tileInfront)
+    grid[tileInfront] = grid[tilePosition] 
+    grid[tilePosition] = 0
+    @somethingMoved = 1
+    return grid
+  end
+
+  def moveToBack(grid, tilePosition, lastPosition)
+    grid[lastPosition] = grid[tilePosition]
+    grid[tilePosition] = 0
     @somethingMoved = 1
     return grid
   end
