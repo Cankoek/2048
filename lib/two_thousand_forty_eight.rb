@@ -166,6 +166,7 @@ class Game
                 grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_minus_MoveTo] = 1
+                @somethingMoved = 1
                 break
               else
                 if isShifted[arrPosC_minus_MoveTo] == 1
@@ -173,6 +174,7 @@ class Game
                     grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter] 
                     grid[arrayPositionCounter] = 0
                     isShifted[arrPosC_minus_MoveTo] = 1
+                    @somethingMoved = 1
                   end
                   break
                 end
@@ -181,8 +183,11 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_minus_MoveTo+1 != arrayPositionCounter
-                grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter]
-                grid[arrayPositionCounter] = 0
+                if grid[arrayPositionCounter] != 0
+                  grid[arrPosC_minus_MoveTo+1] = grid[arrayPositionCounter]
+                  grid[arrayPositionCounter] = 0
+                  @somethingMoved = 1
+                end
               end
               break
             end
@@ -190,9 +195,12 @@ class Game
           #If there is no number to the left, move the "to-move"-field to the last possible field of the row
           moveToCounter += 1
           if moveToCounter == 4
-            grid[rowCounter] = grid[arrayPositionCounter]
-            grid[arrayPositionCounter] = 0
-            break
+            if grid[arrayPositionCounter] != 0
+              grid[rowCounter] = grid[arrayPositionCounter]
+              grid[arrayPositionCounter] = 0
+              @somethingMoved = 1
+              break
+            end
           end
         end
         #Checks the max arrayPosCounter for each row
@@ -243,13 +251,17 @@ class Game
                 grid[arrPosC_plus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_plus_MoveTo] = 1
+                @somethingMoved = 1
                 break
               else
                 if isShifted[arrPosC_plus_MoveTo] == 1
                   if arrPosC_plus_MoveTo-4 != arrayPositionCounter
-                    grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
-                    grid[arrayPositionCounter] = 0
-                    isShifted[arrPosC_plus_MoveTo] = 1
+                    if grid[arrayPositionCounter] != 0
+                      grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
+                      grid[arrayPositionCounter] = 0
+                      isShifted[arrPosC_plus_MoveTo] = 1
+                      @somethingMoved = 1
+                    end
                   end
                   break
                 end
@@ -258,8 +270,11 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_plus_MoveTo-4 != arrayPositionCounter
-                grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
-                grid[arrayPositionCounter] = 0
+                if grid[arrayPositionCounter] != 0
+                  grid[arrPosC_plus_MoveTo-4] = grid[arrayPositionCounter] 
+                  grid[arrayPositionCounter] = 0
+                  @somethingMoved = 1
+                end
               end
               break
             end
@@ -267,9 +282,12 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
-            grid[12+columnCounter] = grid[arrayPositionCounter]
-            grid[arrayPositionCounter] = 0
-            break
+            if grid[arrayPositionCounter] != 0
+              grid[12+columnCounter] = grid[arrayPositionCounter]
+              grid[arrayPositionCounter] = 0
+              @somethingMoved = 1
+              break
+            end
           end
         end
         #Checks the min arrayPosCounter for each row
@@ -308,13 +326,17 @@ class Game
                 grid[arrPosC_minus_MoveTo] = 2*grid[arrayPositionCounter]
                 grid[arrayPositionCounter] = 0
                 isShifted[arrPosC_minus_MoveTo] = 1
+                @somethingMoved = 1
                 break
               else
                 if isShifted[arrPosC_minus_MoveTo] == 1
                   if arrPosC_minus_MoveTo+4 != arrayPositionCounter
-                    grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
-                    grid[arrayPositionCounter] = 0
-                    isShifted[arrPosC_minus_MoveTo] = 1
+                    if grid[arrayPositionCounter] != 0
+                      grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
+                      grid[arrayPositionCounter] = 0
+                      isShifted[arrPosC_minus_MoveTo] = 1
+                      @somethingMoved = 1
+                    end
                   end
                   break
                 end
@@ -323,8 +345,11 @@ class Game
             else
               #If the "to-move" field is the field infront of the next field with a value; do nothing
               if arrPosC_minus_MoveTo+4 != arrayPositionCounter
-                grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
-                grid[arrayPositionCounter] = 0
+                if grid[arrayPositionCounter] != 0
+                  grid[arrPosC_minus_MoveTo+4] = grid[arrayPositionCounter] 
+                  grid[arrayPositionCounter] = 0
+                  @somethingMoved = 1
+                end
               end
               break
             end
@@ -332,9 +357,11 @@ class Game
           #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
-            grid[columnCounter] = grid[arrayPositionCounter]
-            grid[arrayPositionCounter] = 0
-            break
+            if grid[arrayPositionCounter] != 0
+              grid[columnCounter] = grid[arrayPositionCounter]
+              grid[arrayPositionCounter] = 0
+              break
+            end
           end
         end
         #Checks the min arrayPosCounter for each row
