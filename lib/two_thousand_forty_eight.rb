@@ -28,7 +28,7 @@ To-do:
   Add a basic UI for testing                                #Done
   Add user input                                            #Done
   Improve move functions & overall game logic
-  Improve the UI
+  Improve the UI                                            #Done
   Add win condition at 2048                                 #Done
   Add a points counter
   Add check if anything moves
@@ -373,10 +373,14 @@ class Game
   end
 
   def userInput()
+    puts("w:Up a:Left s:Down d:Right\n")
     while true
-      puts("w:Up a:Left s:Down d:Right\n")
-      input = gets.chomp
+      
+      system("stty raw -echo")
+      input = STDIN.getc.chr
       print(input)
+      system("stty -raw echo")
+    
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d"
         break
       else
