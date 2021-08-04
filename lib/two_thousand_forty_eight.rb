@@ -73,29 +73,16 @@ class Game
   #Shift Functions
 
   def LRshift(grid, direction)
-    case direction.downcase
-    #Right direction values
-    when 'd'
-    numb1 = 2
-    numb2 = -1
-    numb3 = 3
-
-    #Left direction values
-    when 'a'
-    numb1 = -1
-    numb2 = 4
-    numb3 = 1
-    end
     rowCounter = 0
-
     4.times do
-      tilePosition = numb1+rowCounter 
       alreadyMerged= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
       case direction
       when 'd'
+        tilePosition = 2+rowCounter 
         maxTile = -1+rowCounter
       when 'a'
+        tilePosition = -1+rowCounter 
         maxTile = 4+rowCounter
       end
 
@@ -107,8 +94,13 @@ class Game
           when 'd'
             moveToPosition = tilePosition + moveToCounter
             if moveToPosition > 15 then moveToPosition = 15 end
+            tileInfront = moveToPosition - 1
+            lastPosition = 3 + rowCounter
           when 'a'
             moveToPosition = tilePosition - moveToCounter
+            if moveToPosition < 0 then moveToPosition = 0 end
+            tileInfront = moveToPosition + 1
+            lastPosition = rowCounter
           end
 
 
@@ -119,49 +111,32 @@ class Game
                 alreadyMerged[moveToPosition] = 1
                 break
               elsif alreadyMerged[moveToPosition] == 1
-                case direction.downcase
-                when 'd'
-                  tileInfront = moveToPosition - 1
-                when 'a'
-                  tileInfront = moveToPosition + 1
-                end
                 if tileInfront != tilePosition  #if Tile infront is not the same as tilePosition
                   grid = moveInfront(grid, tilePosition, tileInfront)
                 end
                 break
               end            
             else
-              case direction.downcase
-              when 'd'
-                tileInfront = moveToPosition - 1
-              when 'a'
-                tileInfront = moveToPosition + 1
-              end
-
-              if tileInfront != tilePosition
-                if tilePosition != 0
-                  grid = moveInfront(grid, tilePosition, tileInfront)
+              if grid[moveToPosition] != 0
+                if tileInfront != tilePosition
+                  print(tileInfront, tilePosition)
+                  if tilePosition != 0
+                    grid = moveInfront(grid, tilePosition, tileInfront)
+                  end
                 end
               end
               break
             end
           end
-
           moveToCounter += 1
           if moveToCounter == 4
             if tilePosition != 0
-              case direction.downcase
-              when 'd'
-                lastPosition = numb3 + rowCounter
-              when 'a'
-                lastPosition = rowCounter
-              end
               grid = moveToBack(grid,tilePosition, lastPosition)
               break
             end
           end
         end
-        if tilePosition != numb2+rowCounter
+        if tilePosition != maxTile
           case direction.downcase
           when 'd'
             tilePosition -= 1
