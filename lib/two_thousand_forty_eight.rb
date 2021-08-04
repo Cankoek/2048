@@ -83,12 +83,12 @@ class Game
     numb1 = -1
     numb2 = 
 
-  rowCounter = 0
-  4.times do
-    TilePosition = numb1+rowCounter 
-    isShifted = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    rowCounter = 0
+    4.times do
+      TilePosition = numb1+rowCounter 
+      isShifted = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-    until TilePosition == numb2+rowCounter do
+      until TilePosition == numb2+rowCounter do
         case direction
         when direction == 0
             moveToPosition = TilePosition + moveToCounter
@@ -99,6 +99,12 @@ class Game
         end
       end
     end
+  end
+
+  def merge(Grid,TilePosition, moveToPosition)
+    grid[moveToPosition] = 2*grid[TilePosition]
+    grid[TilePosition] = 0
+    return grid
   end
   
   def shiftRight(grid)
