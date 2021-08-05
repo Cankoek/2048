@@ -27,7 +27,8 @@ end
 class Game
   def initialize()
     @somethingMoved = 0
-    gridArray = [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0]
+    @points = 0
+    gridArray = Array.new(16,0)
     2.times do
       gridArray = addRandomNumber(gridArray)
     end
@@ -178,7 +179,7 @@ class Game
   def shiftRight(grid)
     rowCounter = 0
     4.times do
-      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0 ]
+      alreadyMerged = Array.new(16,0)
       tilePosition = 2+rowCounter
       maxTile = -1+rowCounter
       lastPosition = 3+rowCounter
@@ -195,6 +196,7 @@ class Game
             if grid[moveToPosition] == grid[tilePosition] 
               if alreadyMerged[moveToPosition] == 0
                 grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break 
               else
@@ -239,7 +241,7 @@ class Game
   def shiftLeft(grid)
     rowCounter = 0
     4.times do
-      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      alreadyMerged = Array.new(16,0)
       tilePosition = 1+rowCounter
       maxTile = 4+rowCounter
       lastPosition = rowCounter
@@ -257,6 +259,7 @@ class Game
             if grid[tilePosition] == grid[moveToPosition] 
               if alreadyMerged[moveToPosition] == 0
                 grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break 
               else
@@ -301,7 +304,7 @@ class Game
   def shiftDown(grid)
     columnCounter = 0
     4.times do
-      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      alreadyMerged = Array.new(16,0)
       tilePosition = 8+columnCounter
       maxTile = -4+columnCounter
       lastPosition = 12 + columnCounter
@@ -322,6 +325,7 @@ class Game
             if grid[tilePosition] == grid[moveToPosition] 
               if alreadyMerged[moveToPosition] == 0
                 grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break
               else
@@ -345,7 +349,6 @@ class Game
               break
             end
           end
-          #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
             if grid[tilePosition] != 0
@@ -355,12 +358,10 @@ class Game
             end
           end
         end
-        #Checks the min arrayPosCounter for each row
         if tilePosition >= columnCounter
           tilePosition -= 4
         end
       end
-      #Makes sure that columnCounter has a maximum value of 12
       if columnCounter != 4
           columnCounter += 1
       end
@@ -371,28 +372,24 @@ class Game
   def shiftUp(grid)
     columnCounter = 0
     4.times do
-      alreadyMerged = [0,0,0,0 ,0,0,0,0 ,0,0,0,0, 0,0,0,0]
+      alreadyMerged = Array.new(16,0)
       tilePosition = 4+columnCounter
       maxTile = 16+columnCounter
       lastPosition = columnCounter
 
-      #Checks max ArrPos
       until tilePosition == maxTile do
 
-        #Check if there's a number to the right, if so; check which number. If its the same; merge else stay. If not, move number and reset field
         moveToCounter = 4
         4.times do
 
-          #New variable to fix an issue with array length; Without, Ruby wouldnt work because theres an if-check checking an out of range array index
           moveToPosition = tilePosition-moveToCounter
           tileInfront = moveToPosition+4
 
-          #Checks if any field to the right contains a number
           if grid[moveToPosition] > 0
-            #If the number in the field and current "to-move"-field is the same; merge them together
             if grid[tilePosition] == grid[moveToPosition] 
               if alreadyMerged[moveToPosition] == 0
                 grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break
               else
@@ -406,9 +403,7 @@ class Game
                   break
                 end
               end
-            #Else if there is a number but not the same; move to the field infront of the already taken one
             else
-              #If the "to-move" field is the field infront of the next field with a value; do nothing
               if tileInfront != tilePosition
                 if grid[tilePosition] != 0
                   grid = moveInfront(grid, tilePosition, tileInfront)
@@ -418,7 +413,6 @@ class Game
               break
             end
           end
-          #If there is no number to the right, move the "to-move"-field to the last possible field of the row
           moveToCounter += 4
           if moveToCounter == 16
             if grid[tilePosition] != 0
@@ -467,7 +461,7 @@ class Game
       input = STDIN.getc.chr
       print(input)
       system("stty -raw echo")
-      if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d"
+      if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" 
         break
       else
         puts("Invalid Input. Try again.")
