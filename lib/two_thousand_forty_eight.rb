@@ -46,9 +46,8 @@ class Game
     while true
       @somethingMoved = 0
       drawInterface(grid)
-      direction = userInput()
 
-      case direction.downcase
+      case userInput().downcase
       when 'w'
         grid = shiftUp(grid)
       when 'a'
@@ -62,7 +61,6 @@ class Game
       when 'e'
         break
       end
-
       if checkWin(grid) == true
         break
       end
@@ -366,32 +364,19 @@ class Game
     4.times do
       alreadyMerged= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-      case direction
-      when 'd'
-        tilePosition = 2+rowCounter 
-        maxTile = -1+rowCounter
-      when 'a'
-        tilePosition = -1+rowCounter 
-        maxTile = 4+rowCounter
-      end
+      tilePosition = direction == "d" ? 2+rowCounter : -1+rowCounter
+      maxTile = direction == "d" ? -1+rowCounter : 4+rowCounter
 
       until tilePosition == maxTile do
 
         moveToCounter = 1
         4.times do
-          case direction.downcase
-          when 'd'
-            moveToPosition = tilePosition + moveToCounter
-            if moveToPosition > 15 then moveToPosition = 15 end
-            tileInfront = moveToPosition - 1
-            lastPosition = 3 + rowCounter
-          when 'a'
-            moveToPosition = tilePosition - moveToCounter
-            if moveToPosition < 0 then moveToPosition = 0 end
-            tileInfront = moveToPosition + 1
-            lastPosition = rowCounter
-          end
-
+          
+          moveToPosition = direction == "d" ? tilePosition + moveToCounter : tilePosition - moveToCounter
+          if moveToPosition > 15 then moveToPosition = 15 end
+          if moveToPosition < 0 then moveToPosition = 0 end
+          tileInfront = direction == "d" ? moveToPosition-1 : moveToPosition+1
+          lastPosition = direction == "d" ? 3+rowCounter : rowCounter
 
           if grid[moveToPosition] > 0                         #If field is not empty
             if grid[tilePosition] == grid[moveToPosition]   #If both fields contain the same number
@@ -429,12 +414,7 @@ class Game
           end
         end
         if tilePosition != maxTile
-          case direction.downcase
-          when 'd'
-            tilePosition -= 1
-          when 'a'
-            tilePosition += 1
-          end
+          tilePosition = direction == "d" ? tilePosition-1 : tilePosition+1
         end
       end
       if rowCounter != 12
@@ -532,7 +512,7 @@ class Game
   #User Interface
   def drawInterface(grid)
     #Clears the console, prints points and the grid
-    system "clear"
+    #system "clear"
     print("\nPoints: ", @points, "\n\n")   
     counter = 0
 
