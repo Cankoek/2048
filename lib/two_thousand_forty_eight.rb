@@ -47,15 +47,16 @@ class Game
       @somethingMoved = 0
       drawInterface(grid)
 
-      case userInput().downcase
+      direction = userInput()
+      case direction.downcase
       when 'w'
         grid = shiftUp(grid)
       when 'a'
-        grid = shiftLeft(grid)
+        grid = LRshift(grid,direction)
       when 's' 
         grid = shiftDown(grid)
       when 'd'
-        grid = shiftRight(grid)
+        grid = LRshift(grid,direction)
       when 'r'
         reset()
       when 'e'
@@ -362,31 +363,31 @@ class Game
   def LRshift(grid, direction)
     rowCounter = 0
     4.times do
-      alreadyMerged= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-
-      tilePosition = direction == "d" ? 2+rowCounter : -1+rowCounter
+      alreadyMerged = Array.new(16,0)
+      tilePosition = direction == "d" ? 2+rowCounter : 1+rowCounter
       maxTile = direction == "d" ? -1+rowCounter : 4+rowCounter
+      lastPosition = direction == "d" ? 3+rowCounter : rowCounter
 
       until tilePosition == maxTile do
 
         moveToCounter = 1
         4.times do
-          
+
           moveToPosition = direction == "d" ? tilePosition + moveToCounter : tilePosition - moveToCounter
           if moveToPosition > 15 then moveToPosition = 15 end
           if moveToPosition < 0 then moveToPosition = 0 end
           tileInfront = direction == "d" ? moveToPosition-1 : moveToPosition+1
-          lastPosition = direction == "d" ? 3+rowCounter : rowCounter
+          
 
-          if grid[moveToPosition] > 0                         #If field is not empty
-            if grid[tilePosition] == grid[moveToPosition]   #If both fields contain the same number
-              if alreadyMerged[moveToPosition] == 0       #If the tile (where to move) has not merged yet
+          if grid[moveToPosition] > 0                                 #If field is not empty
+            if grid[tilePosition] == grid[moveToPosition]             #If both fields contain the same number
+              if alreadyMerged[moveToPosition] == 0                   #If the tile (where to move) has not merged yet
                 grid = merge(grid, tilePosition, moveToPosition)
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
 
                 break
               elsif alreadyMerged[moveToPosition] == 1
-                if tileInfront != tilePosition  #if Tile infront is not the same as tilePosition
+                if tileInfront != tilePosition                          #if Tile infront is not the same as tilePosition
                   grid = moveInfront(grid, tilePosition, tileInfront)
                   @somethingMoved = 1
                 end
@@ -397,7 +398,7 @@ class Game
                 if tileInfront != tilePosition
                   if tilePosition != 0
                     grid = moveInfront(grid, tilePosition, tileInfront)
-                    @somethingMoved
+                    @somethingMoved = 1
                   end
                 end
               end
