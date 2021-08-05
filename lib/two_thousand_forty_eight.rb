@@ -28,15 +28,19 @@ class Game
   def initialize()
     @somethingMoved = 0
     @points = 0
+    start()
+  end
+
+  def start()
     gridArray = Array.new(16,0)
-    2.times do
-      gridArray = addRandomNumber(gridArray)
+    2.times do 
+      gridArray = addRandomNumber(gridArray) 
     end
-    
     routine(gridArray)
   end
 
   #Game Routine
+
   def routine(grid)
     while true
       @somethingMoved = 0
@@ -52,6 +56,10 @@ class Game
         grid = shiftDown(grid)
       when 'd'
         grid = shiftRight(grid)
+      when 'r'
+        reset()
+      when 'e'
+        break
       end
 
       if checkWin(grid) == true
@@ -455,12 +463,11 @@ class Game
   end
 
   def userInput()
-    puts("w:Up a:Left s:Down d:Right\n")
+    puts("w:Up a:Left s:Down d:Right r:Reset e:End\n")
     while true
       system("stty raw -echo")
       input = STDIN.getc.chr
       system("stty -raw echo")
-      print(input)
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" || input.downcase == "e" || input.downcase == "r"
         break
       else
@@ -514,7 +521,12 @@ class Game
     end
     return true
   end
-  
+
+  def reset()
+    system "clear"
+    @points = 0
+    start()
+  end
 #-------------------------------------------------------------------------------------------------------------
   #User Interface
   def drawInterface(grid)
