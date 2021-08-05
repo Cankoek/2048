@@ -52,17 +52,17 @@ class Game
       when 'w'
         grid = shiftUp(grid)
       when 'a'
-        grid = LRshift(grid,direction)
+        grid = shiftLeft(grid)
       when 's' 
         grid = shiftDown(grid)
       when 'd'
-        grid = LRshift(grid,direction)
+        grid = shiftRight(grid)
       when 'r'
         reset()
       when 'e'
         break
       end
-      if checkWin(grid) == true
+      if checkWin(grid) == true 
         break
       end
       if checkLoose(grid) == true
@@ -383,8 +383,8 @@ class Game
             if grid[tilePosition] == grid[moveToPosition]             #If both fields contain the same number
               if alreadyMerged[moveToPosition] == 0                   #If the tile (where to move) has not merged yet
                 grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
-
                 break
               elsif alreadyMerged[moveToPosition] == 1
                 if tileInfront != tilePosition                          #if Tile infront is not the same as tilePosition
@@ -420,6 +420,72 @@ class Game
       end
       if rowCounter != 12
         rowCounter += 4
+      end
+    end
+    return grid
+  end 
+
+  def UDshift(grid, direction)
+    columnCounter = 0
+    4.times do
+      alreadyMerged = Array.new(16,0)
+      tilePosition = direction == "s" ? 8+columnCounter : 4+columnCounter
+      maxTile = direction == "s" ? -4+columnCounter : 16+columnCounter
+      lastPosition = direction == "s" ? 12+columnCounter : columnCounter
+
+      until tilePosition == maxTile do
+
+        moveToCounter = 4
+        4.times do
+
+          moveToPosition = direction == "s" ? tilePosition + moveToCounter : tilePosition - moveToCounter
+          if moveToPosition >= 16 && columnCounter == 0 then moveToPosition = 12 end    
+          if moveToPosition >= 16 && columnCounter == 1 then moveToPosition = 13 end
+          if moveToPosition >= 16 && columnCounter == 2 then moveToPosition = 14 end
+          if moveToPosition >= 16 && columnCounter == 3 then moveToPosition = 15 end
+          tileInfront = direction == "s" ? moveToPosition-4 : moveToPosition+4
+          
+
+          if grid[moveToPosition] > 0                                 #If field is not empty
+            if grid[tilePosition] == grid[moveToPosition]             #If both fields contain the same number
+              if alreadyMerged[moveToPosition] == 0                   #If the tile (where to move) has not merged yet
+                grid = merge(grid, tilePosition, moveToPosition)
+                @points = @points+grid[tilePosition]+grid[moveToPosition]
+                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+                break
+
+              elsif alreadyMerged[moveToPosition] == 1
+                if tileInfront != tilePosition                          #if Tile infront is not the same as tilePosition
+                  grid = moveInfront(grid, tilePosition, tileInfront)
+                  @somethingMoved = 1
+                end
+                break
+              end            
+            else
+              if tileInfront != tilePosition                                #If tile infront is not the same as current tile
+                if grid[tilePosition] != 0                                  #If current tile is not empty
+                  grid = moveInfront(grid, tilePosition, tileInfront)
+                  @somethingMoved = 1
+                end
+              end
+              break
+            end
+          end
+          moveToCounter += 4
+          if moveToCounter == 16
+            if tilePosition != 0
+              grid = moveToBack(grid,tilePosition, lastPosition)
+              @somethingMoved = 1
+              break
+            end
+          end
+        end
+        if tilePosition >= columnCounter
+          tilePosition = direction == "s" ? tilePosition-4 : tilePosition+4
+        end
+      end
+      if columnCounter != 4
+        columnCounter += 1
       end
     end
     return grid
@@ -537,4 +603,3 @@ class Game
     print("\n")
   end
 end
-
