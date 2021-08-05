@@ -40,7 +40,7 @@ class Game
   def routine(grid)
     while true
       @somethingMoved = 0
-      drawGrid(grid)
+      drawInterface(grid)
       direction = userInput()
 
       case direction.downcase
@@ -459,9 +459,9 @@ class Game
     while true
       system("stty raw -echo")
       input = STDIN.getc.chr
-      print(input)
       system("stty -raw echo")
-      if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" 
+      print(input)
+      if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" || input.downcase == "e" || input.downcase == "r"
         break
       else
         puts("Invalid Input. Try again.")
@@ -517,9 +517,9 @@ class Game
   
 #-------------------------------------------------------------------------------------------------------------
   #User Interface
-  def drawGrid(grid)
-    #system "clear"
-    print("\n")
+  def drawInterface(grid)
+    system "clear"
+    print("\nPoints: ", @points, "\n\n")   
     counter = 0
     #Draws the grids
     16.times do
