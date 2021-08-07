@@ -92,13 +92,45 @@ describe TwoThousandFortyEight do
   end
 
   #-------------------------------------------------------------------------------------------------------------
-
+  #Points test
 
   it "Point Counter test" do
     subject.resetPoints()
     assert_equal 4, subject.addPoints(4)
   end
-  
+
+  #-------------------------------------------------------------------------------------------------------------
+  #Loose Test
+  it "Lose test >> Actual lose" do
+    assert_equal true, subject.checkLose([1,2,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+  end
+
+  it "Lose test >> Not an actual lose (shiftRight)" do
+    assert_equal false, subject.checkLose([1,1,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+  end
+
+  it "Lose test >> Not an actual lose (shiftLeft)" do
+    assert_equal false, subject.checkLose([1,2,3,3 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+  end
+
+  it "Lose test >> Not an actual lose (shiftDown)" do
+    assert_equal false, subject.checkLose([1,2,3,4 ,1,6,7,8 ,9,10,11,12 ,13,14,15,16])
+  end
+
+  it "Lose test >> Not an actual lose (shiftUp)" do
+    assert_equal false, subject.checkLose([1,2,3,4 ,5,6,7,8 ,13,10,11,12 ,13,14,15,16])
+  end
+
+  #-------------------------------------------------------------------------------------------------------------
+  #Win test
+  it "Win test >> Actual win" do
+    assert_equal true, subject.checkWin([2048,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+  end
+  it "Win test >> Not an actual win" do
+    assert_equal false, subject.checkWin([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+  end
+
+
   it "runs" do
     subject.run
   end
