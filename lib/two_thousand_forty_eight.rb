@@ -435,12 +435,16 @@ module TwoThousandFortyEight
 
   def reset()
     #Resets points and starts again
-    @points = 0
+    resetPoints()
     start()
   end
 
 def addPoints(tileValue)
     @points = @points + tileValue
+end
+
+def resetPoints()
+  @points = 0
 end
 
 

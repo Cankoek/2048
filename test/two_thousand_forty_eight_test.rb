@@ -93,13 +93,10 @@ describe TwoThousandFortyEight do
 
   #-------------------------------------------------------------------------------------------------------------
 
-  def pointsTestHelper
-    subject.shiftRight([2,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
-    return @points
-  end
 
   it "Point Counter test" do
-    assert_equal 4, pointsTestHelper()
+    subject.resetPoints()
+    assert_equal 4, subject.addPoints(4)
   end
   
   it "runs" do
