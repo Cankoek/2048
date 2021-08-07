@@ -63,7 +63,7 @@ module TwoThousandFortyEight
       if checkWin(grid) == true 
         break
       end
-      if checkLoose(grid) == true
+      if checkLose(grid) == true
         print("\nYou lost.")
         break
       end
@@ -401,7 +401,7 @@ module TwoThousandFortyEight
     return false
   end
 
-  def checkLoose(grid)
+  def checkLose(grid)
     #Check if grid has no empty tiles
     if grid.include? 0
       return false
