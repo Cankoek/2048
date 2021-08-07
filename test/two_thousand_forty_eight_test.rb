@@ -84,16 +84,23 @@ describe TwoThousandFortyEight do
   end
 
   it "shiftUp three consecutive tiles" do
-    assert_equal [4,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([0,0,0,0 ,2,0,0,0 ,2,0,0,0 ,2,0,0,0])
+    assert_equal [4,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,0,0,0,0])
   end
 
   it "shiftUp resulting tile cannot merge" do
     assert_equal [8,0,0,0 ,8,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,8,0,0,0])
   end
 
-  
-  print("Passed all tests.. initializing game")
-  sleep(3)
+  #-------------------------------------------------------------------------------------------------------------
+
+  def pointsTestHelper
+    subject.shiftRight([2,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    return @points
+  end
+
+  it "Point Counter test" do
+    assert_equal 4, pointsTestHelper()
+  end
   
   it "runs" do
     subject.run

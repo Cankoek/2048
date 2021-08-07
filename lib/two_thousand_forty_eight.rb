@@ -1,8 +1,8 @@
 module TwoThousandFortyEight
   extend self
 
-
-
+  @somethingMoved = 0
+  @points = 0
   #Start functions
   def self.run
     start()
@@ -10,7 +10,6 @@ module TwoThousandFortyEight
   end
   
   def self.start()
-    @somethingMoved = 0
     @points = 0
     gridArray = Array.new(16,0)
     2.times do 
@@ -97,7 +96,7 @@ module TwoThousandFortyEight
             if grid[moveToPosition] == grid[tilePosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
                 grid = merge(grid, tilePosition, moveToPosition)            
-                @points = @points+grid[tilePosition]+grid[moveToPosition]
+                addPoints(grid[moveToPosition])
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break 
               else
@@ -160,7 +159,7 @@ module TwoThousandFortyEight
             if grid[tilePosition] == grid[moveToPosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
                 grid = merge(grid, tilePosition, moveToPosition)
-                @points = @points+grid[tilePosition]+grid[moveToPosition] 
+                addPoints(grid[moveToPosition])
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break 
               else
@@ -226,7 +225,7 @@ module TwoThousandFortyEight
             if grid[tilePosition] == grid[moveToPosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
                 grid = merge(grid, tilePosition, moveToPosition)  
-                @points = @points+grid[tilePosition]+grid[moveToPosition]
+                addPoints(grid[moveToPosition])
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break
               else
@@ -290,7 +289,7 @@ module TwoThousandFortyEight
             if grid[tilePosition] == grid[moveToPosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
                 grid = merge(grid, tilePosition, moveToPosition)
-                @points = @points+grid[tilePosition]+grid[moveToPosition]
+                addPoints(grid[moveToPosition])
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break
               else
@@ -439,6 +438,11 @@ module TwoThousandFortyEight
     @points = 0
     start()
   end
+
+def addPoints(tileValue)
+    @points = @points + tileValue
+end
+
 
 #-------------------------------------------------------------------------------------------------------------
   #User Interface
