@@ -5,8 +5,12 @@ describe TwoThousandFortyEight do
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftRight Tests
-  it "Basic shiftRight Test" do 
+  it "1. Basic shiftRight Test" do 
     assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+  end
+
+  it "2. Basic shiftRight Test" do 
+    assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
   it "Basic shiftRight Merge" do
@@ -27,8 +31,12 @@ describe TwoThousandFortyEight do
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftLeft Test
-  it "Basic shiftLeft Test" do 
+  it "1.Basic shiftLeft Test" do 
     assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+  end
+
+  it "2. Basic shiftLeft Test" do 
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
   it "Basic shiftLeft Merge" do
@@ -49,8 +57,12 @@ describe TwoThousandFortyEight do
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftDown Test
-  it "Basic shiftDown Test" do 
+  it "1. Basic shiftDown Test" do 
     assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shiftDown([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+  end
+
+  it "2. Basic shiftDown Test" do 
+    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shiftDown([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0])
   end
 
   it "Basic shiftDown Merge" do
@@ -71,8 +83,12 @@ describe TwoThousandFortyEight do
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftUp Test
-  it "Basic shiftUp Test" do 
+  it "1. Basic shiftUp Test" do 
     assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0])
+  end
+
+  it "2. Basic shiftUp Test" do 
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
   it "Basic shiftUp Merge" do
@@ -130,10 +146,8 @@ describe TwoThousandFortyEight do
     assert_equal false, subject.checkWin([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
-
   it "runs" do
     subject.run
   end
-
 
 end
