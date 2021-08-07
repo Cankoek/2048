@@ -1,15 +1,17 @@
 module TwoThousandFortyEight
   extend self
 
-  @somethingMoved = 0
-  @points = 0
 
+
+  #Start functions
   def self.run
     start()
     true
   end
   
-  def start()
+  def self.start()
+    @somethingMoved = 0
+    @points = 0
     gridArray = Array.new(16,0)
     2.times do 
       gridArray = addRandomNumber(gridArray) 
@@ -19,7 +21,7 @@ module TwoThousandFortyEight
 
   #-------------------------------------------------------------------------------------------------------------
   #To-do:
-  #    Improve move functions & overall game logic               #Partially done
+  #    Add tests (TDD)
 
   # Already Done:
   #    Add basic game logic                                      #Done
@@ -34,7 +36,7 @@ module TwoThousandFortyEight
   #    Add a check if something moved                            #Done
   #    Add better classes                                        #Canceled
   #    Add a points counter                                      #Done
-
+  #    Improve move functions & overall game logic               #Done
 
   #-------------------------------------------------------------------------------------------------------------
   #Game Routine
@@ -73,11 +75,8 @@ module TwoThousandFortyEight
     end
   end
 
-#-------------------------------------------------------------------------------------------------------------
-  #-Game Functions-
-
+  #-------------------------------------------------------------------------------------------------------------
   #Shift Functions
-
   def shiftRight(grid)
     rowCounter = 0
     4.times do
@@ -335,6 +334,7 @@ module TwoThousandFortyEight
     return grid
   end
 
+  #Move functions
   def merge(grid,tilePosition, moveToPosition)
     #Merge Numbers into desired tile, reset current tile
     grid[moveToPosition] = 2*grid[tilePosition]
