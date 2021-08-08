@@ -58,14 +58,22 @@ module TwoThousandFortyEight
       when 'r'
         reset()
       when 'e'
-        break
+        exit()
       end
+
       if checkWin(grid) == true 
         break
       end
+
       if checkLose(grid) == true
-        print("\nYou lost.")
-        break
+        drawLoseScreen(grid)
+        case loseInput.downcase
+        when 'y'
+          reset()
+        when 'n'
+          exit()
+        end
+
       end
       if @somethingMoved == 1            #If anything moved, adds a new random number to the grid
         grid = addRandomNumber(grid)
@@ -447,6 +455,21 @@ def resetPoints()
   @points = 0
 end
 
+def loseInput()
+  puts("Do you want to restart the game? y:Yes n:No")
+  while true
+    system("stty raw -echo")
+    input = STDIN.getc.chr
+    system("stty -raw echo")
+    if input.downcase == "y" || input.downcase == "n" 
+      break
+    else
+      puts("Invalid Input. Try again.")
+    end
+  end
+  return input
+end
+
 
 #-------------------------------------------------------------------------------------------------------------
   #User Interface
@@ -474,5 +497,32 @@ end
       counter += 1
     end
     print("\n")
+  end
+
+  def drawLoseScreen(grid)
+    system "clear"
+
+    counter = 0
+    print("\n")
+    16.times do
+      if grid[counter] == 0
+        print("[    ", "] ")
+      elsif grid[counter] > 0 && grid[counter] < 10
+        print("[   ",grid[counter], "] ")
+      elsif grid[counter] >= 10 && grid[counter] < 100
+        print("[  ",grid[counter], "] ")
+      elsif grid[counter] >= 100 && grid[counter] < 1000
+        print("[ ",grid[counter], "] ")
+      elsif grid[counter] >= 1000
+        print("[",grid[counter], "] ")
+      end
+      if counter == 3 or counter == 7 or counter == 11 or counter == 15
+        print("\n")
+      end
+      counter += 1
+    end
+    print("\n")
+
+    print("\nYou've reached ", @points, " Points\n\n")
   end
 end
