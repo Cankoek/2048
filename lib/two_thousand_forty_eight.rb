@@ -50,12 +50,16 @@ module TwoThousandFortyEight
       case direction.downcase
       when 'w'
         grid = shiftUp(grid)
+        @lastMove = "Up"
       when 'a'
         grid = shiftLeft(grid)
+        @lastMove = "Left"
       when 's' 
         grid = shiftDown(grid)
+        @lastMove = "Down"
       when 'd'
         grid = shiftRight(grid)
+        @lastMove = "Right"
       when 'r'
         reset()
       when 'e'
@@ -501,7 +505,7 @@ end
   def drawInterface(grid)
     #Clears the console, prints points and the grid
     system "clear"
-    print("\nPoints: ", @points, "\n\n")   
+    print("\nLast move: ", @lastMove, "\nPoints: ", @points, "\n\n")   
     counter = 0
 
     16.times do
