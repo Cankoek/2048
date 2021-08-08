@@ -3,6 +3,7 @@ module TwoThousandFortyEight
 
   @somethingMoved = 0
   @points = 0
+  @alreadyWon = 0
   #Start functions
   def self.run
     start()
@@ -61,8 +62,16 @@ module TwoThousandFortyEight
         exit()
       end
 
-      if checkWin(grid) == true 
-        break
+      if @alreadyWon == 0
+        if checkWin(grid) == true 
+          print("\nCongratulations! You've beat 2048.\n")
+          case winInput.downcase
+          when 'r'
+            reset()
+          when 'n'
+            exit()
+          end
+        end
       end
 
       if checkLose(grid) == true
@@ -387,7 +396,7 @@ module TwoThousandFortyEight
 
   def userInput()
     #Checks constantly for userinput
-    puts("w:Up a:Left s:Down d:Right r:Reset e:End\n")
+    puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
     while true
       system("stty raw -echo")
       input = STDIN.getc.chr
@@ -404,6 +413,7 @@ module TwoThousandFortyEight
   def checkWin(grid)
     #If array contains 2048, you've won
     if grid.include? 2048
+      @alreadyWon = 1
       return true
     end
     return false
@@ -470,6 +480,21 @@ def loseInput()
   return input
 end
 
+def winInput()
+  puts("Do you want to continue? y:Yes n:No r:Restart ")
+  while true
+    system("stty raw -echo")
+    input = STDIN.getc.chr
+    system("stty -raw echo")
+    if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
+      break
+    else
+      puts("Invalid Input. Try again.")
+    end
+  end
+  return input
+end
+
 
 #-------------------------------------------------------------------------------------------------------------
   #User Interface
@@ -525,4 +550,5 @@ end
 
     print("\nYou've reached ", @points, " Points\n\n")
   end
+
 end
