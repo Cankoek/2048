@@ -146,8 +146,4 @@ describe TwoThousandFortyEight do
     assert_equal false, subject.checkWin([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
-  it "runs" do
-    subject.run
-  end
-
 end
