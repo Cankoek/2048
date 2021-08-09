@@ -7,7 +7,8 @@ module TwoThousandFortyEight
 
   #Start functions
   def self.run
-    puts("Please choose your operating system: w:Windows l:Linux")
+    system "cls" && "clear"
+    puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
     @operatingSystem = gets.chomp
     @operatingSystem.downcase == "w" || @operatingSystem.downcase == "l" ? start() : self.run
     true
@@ -490,7 +491,7 @@ def boolInput()
 end
 
 def loseInput()
-  puts("Do you want to restart the game? y:Yes n:No")
+  puts("Do you want to restart the game? (y:Yes n:No)")
   while true
   input = boolInput()
     if input.downcase == "y" || input.downcase == "n" 
@@ -503,7 +504,7 @@ def loseInput()
 end
 
 def winInput()
-  puts("Do you want to continue? y:Yes n:No r:Restart ")
+  puts("Do you want to continue? (y:Yes n:No r:Restart)")
   while true
     input = boolInput()
     if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
@@ -522,9 +523,8 @@ end
     #Clears the console, prints points and the grid
     system "clear"
     system "cls"
-    print("\nLast move: ", @lastMove, "\nPoints: ", @points, "\n\n")   
+    print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n")   
     counter = 0
-
     16.times do
       if grid[counter] == 0
         print("[    ", "] ")
