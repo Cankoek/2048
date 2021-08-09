@@ -4,9 +4,12 @@ module TwoThousandFortyEight
   @somethingMoved = 0
   @points = 0
   @alreadyWon = 0
+
   #Start functions
   def self.run
-    start()
+    puts("Please choose your operating system: w:Windows l:Linux")
+    @operatingSystem = gets.chomp
+    @operatingSystem.downcase == "w" || @operatingSystem.downcase == "l" ? start() : self.run
     true
   end
   
@@ -402,9 +405,14 @@ module TwoThousandFortyEight
     #Checks constantly for userinput
     puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
     while true
-      system("stty raw -echo")
-      input = STDIN.getc.chr
-      system("stty -raw echo")
+      if @operatingSystem == "l"
+        system("stty raw -echo")
+        input = STDIN.getc.chr
+        system("stty -raw echo")
+      else
+        input = gets.chomp
+      end
+
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" || input.downcase == "e" || input.downcase == "r"
         break
       else
@@ -469,12 +477,22 @@ def resetPoints()
   @points = 0
 end
 
-def loseInput()
-  puts("Do you want to restart the game? y:Yes n:No")
-  while true
+def boolInput()
+  if @operatingSystem == "l"
     system("stty raw -echo")
     input = STDIN.getc.chr
     system("stty -raw echo")
+  else
+    input = gets.chomp
+  end
+
+  return input
+end
+
+def loseInput()
+  puts("Do you want to restart the game? y:Yes n:No")
+  while true
+  input = boolInput()
     if input.downcase == "y" || input.downcase == "n" 
       break
     else
@@ -487,9 +505,7 @@ end
 def winInput()
   puts("Do you want to continue? y:Yes n:No r:Restart ")
   while true
-    system("stty raw -echo")
-    input = STDIN.getc.chr
-    system("stty -raw echo")
+    input = boolInput()
     if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
       break
     else
@@ -505,6 +521,7 @@ end
   def drawInterface(grid)
     #Clears the console, prints points and the grid
     system "clear"
+    system "cls"
     print("\nLast move: ", @lastMove, "\nPoints: ", @points, "\n\n")   
     counter = 0
 
@@ -530,7 +547,7 @@ end
 
   def drawLoseScreen(grid)
     system "clear"
-
+    system "cls"
     counter = 0
     print("\n")
     16.times do
