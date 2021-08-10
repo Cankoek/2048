@@ -9,7 +9,7 @@ module TwoThousandFortyEight
   def self.run
     system "cls" && "clear"
     puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
-    @operatingSystem = "l"#gets.chomp
+    @operatingSystem = gets.chomp
     @operatingSystem.downcase == "w" || @operatingSystem.downcase == "l" ? start() : self.run
     true
   end
@@ -23,26 +23,6 @@ module TwoThousandFortyEight
     routine(gridArray)
   end
 
-  #-------------------------------------------------------------------------------------------------------------
-  #To-do:
-  #    Add tests (TDD)
-
-  # Already Done:
-  #    Add basic game logic                                      #Done
-  #    Add moveRight, moveLeft                                   #Done
-  #    Add moveUp, moveDown                                      #Done
-  #    Add function to create random numbers at random spots     #Done
-  #    Add a basic UI for testing                                #Done
-  #    Add user input                                            #Done
-  #    Improve the UI                                            #Done
-  #    Add win condition at 2048                                 #Done
-  #    Reorganize Code                                           #Done
-  #    Add a check if something moved                            #Done
-  #    Add better classes                                        #Canceled
-  #    Add a points counter                                      #Done
-  #    Improve move functions & overall game logic               #Done
-
-  #-------------------------------------------------------------------------------------------------------------
   #Game Routine
 
   def self.routine(grid)
@@ -84,17 +64,12 @@ module TwoThousandFortyEight
 
       if checkLose(grid) == true
         drawInterface(grid)
-        case loseInput.downcase
-        when 'y'
-          reset()
-        when 'n'
-          exit()
-        end
+        if loseInput.downcase == 'y' then reset() else exit() end
+      end
 
-      end
-      if @somethingMoved == 1            #If anything moved, adds a new random number to the grid
-        grid = addRandomNumber(grid)
-      end
+      #If anything moved, adds a new random number to the grid
+      if @somethingMoved == 1 then grid = addRandomNumber(grid) end           
+
       sleep(0.01)
     end
   end
@@ -125,11 +100,8 @@ module TwoThousandFortyEight
 
       until tilePosition == maxTile do
 
-        if direction.downcase == 'a' || direction.downcase == 'd'
-          moveToCounter = 1
-        elsif direction.downcase =='s' || direction.downcase == 'w'
-          moveToCounter = 4
-        end
+        if direction.downcase == 'a' || direction.downcase == 'd' then moveToCounter = 1 end
+        if direction.downcase =='s' || direction.downcase == 'w' then moveToCounter = 4 end
 
         4.times do
           if direction.downcase == 'd'
@@ -147,7 +119,7 @@ module TwoThousandFortyEight
           end
           if moveToPosition > 15 then moveToPosition = 15 end
 
-            
+
           if grid[moveToPosition] > 0                                       #If desired tile is not empty
             if grid[moveToPosition] == grid[tilePosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
@@ -210,13 +182,9 @@ module TwoThousandFortyEight
       end
 
       if direction.downcase == 'a' || direction.downcase == 'd'
-        if counter != 12
-          counter += 4
-        end
+        if counter != 12 then counter += 4 end
       elsif direction.downcase == 's' || direction.downcase == 'w'
-        if counter != 4
-          counter += 1
-        end
+        if counter != 4 then counter += 1 end
       end
 
     end
@@ -326,6 +294,7 @@ module TwoThousandFortyEight
   def reset()
     #Resets points and starts again
     resetPoints()
+    @alreadyWon = 0
     start()
   end
 
