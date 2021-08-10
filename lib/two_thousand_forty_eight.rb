@@ -83,7 +83,7 @@ module TwoThousandFortyEight
       end
 
       if checkLose(grid) == true
-        drawLoseScreen(grid)
+        drawInterface(grid)
         case loseInput.downcase
         when 'y'
           reset()
@@ -134,25 +134,20 @@ module TwoThousandFortyEight
         4.times do
           if direction.downcase == 'd'
             moveToPosition = tilePosition+moveToCounter
-            if moveToPosition > 15 then moveToPosition = 15 end               #To prevent index errors; 15 is the last position in the Grid
             tileInfront = moveToPosition-1
           elsif direction.downcase == 'a'
             moveToPosition = tilePosition-moveToCounter
-            if moveToPosition > 15 then moveToPosition = 15 end               #To prevent index errors; 15 is the last position in the Grid
             tileInfront = moveToPosition+1
           elsif direction.downcase == 's'
             moveToPosition = tilePosition+moveToCounter
-            if moveToPosition >= 16 && counter == 0 then moveToPosition = 12 end    
-            if moveToPosition >= 16 && counter == 1 then moveToPosition = 13 end
-            if moveToPosition >= 16 && counter == 2 then moveToPosition = 14 end
-            if moveToPosition >= 16 && counter == 3 then moveToPosition = 15 end
             tileInfront = moveToPosition-4
           elsif direction.downcase == 'w'
             moveToPosition = tilePosition-moveToCounter
             tileInfront = moveToPosition+4
           end
+          if moveToPosition > 15 then moveToPosition = 15 end
 
-
+            
           if grid[moveToPosition] > 0                                       #If desired tile is not empty
             if grid[moveToPosition] == grid[tilePosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
@@ -251,18 +246,13 @@ module TwoThousandFortyEight
   end
 
   #Help functions
-  def generateRandomInt()
-    #Generates either 2 or 4 | 90%/10%
-    return ranInt = rand(0.0..1.0) < 0.9 ? 2 : 4
-  end
-
   def addRandomNumber(grid)
     #Adds random Number to random empty tile
     while true
       if grid.include? 0
         randvalue = rand(0..15)
         if grid[randvalue] == 0
-          grid[randvalue] = generateRandomInt()
+          grid[randvalue] = rand(0.0..1.0) < 0.9 ? 2 : 4
           break
         end
       else
@@ -283,7 +273,6 @@ module TwoThousandFortyEight
       else
         input = gets.chomp
       end
-
       if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" || input.downcase == "e" || input.downcase == "r"
         break
       else
@@ -391,9 +380,8 @@ module TwoThousandFortyEight
   #User Interface
   def drawInterface(grid)
     #Clears the console, prints points and the grid
-    system "clear"
-    system "cls"
-    print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n")   
+    system "cls" && "clear"
+    !checkLose(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
     counter = 0
     16.times do
       if grid[counter] == 0
@@ -407,39 +395,9 @@ module TwoThousandFortyEight
       elsif grid[counter] >= 1000
         print("[",grid[counter], "] ")
       end
-      if counter == 3 or counter == 7 or counter == 11 or counter == 15
-        print("\n")
-      end
+      if counter == 3 or counter == 7 or counter == 11 or counter == 15 then print("\n") end
       counter += 1
     end
-    print("\n")
+    !checkLose(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points\n\n")
   end
-
-  def drawLoseScreen(grid)
-    system "clear"
-    system "cls"
-    counter = 0
-    print("\n")
-    16.times do
-      if grid[counter] == 0
-        print("[    ", "] ")
-      elsif grid[counter] > 0 && grid[counter] < 10
-        print("[   ",grid[counter], "] ")
-      elsif grid[counter] >= 10 && grid[counter] < 100
-        print("[  ",grid[counter], "] ")
-      elsif grid[counter] >= 100 && grid[counter] < 1000
-        print("[ ",grid[counter], "] ")
-      elsif grid[counter] >= 1000
-        print("[",grid[counter], "] ")
-      end
-      if counter == 3 or counter == 7 or counter == 11 or counter == 15
-        print("\n")
-      end
-      counter += 1
-    end
-    print("\n")
-
-    print("\nYou've reached ", @points, " Points\n\n")
-  end
-
 end
