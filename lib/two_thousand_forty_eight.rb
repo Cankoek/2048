@@ -9,7 +9,7 @@ module TwoThousandFortyEight
   def self.run
     system "cls" && "clear"
     puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
-    @operatingSystem = gets.chomp
+    @operatingSystem = "l"#gets.chomp
     @operatingSystem.downcase == "w" || @operatingSystem.downcase == "l" ? start() : self.run
     true
   end
@@ -53,16 +53,16 @@ module TwoThousandFortyEight
       direction = userInput()
       case direction.downcase
       when 'w'
-        grid = shiftUp(grid)
+        grid = shift(grid,direction)
         @lastMove = "Up"
       when 'a'
-        grid = shiftLeft(grid)
+        grid = shift(grid,direction)
         @lastMove = "Left"
       when 's' 
-        grid = shiftDown(grid)
+        grid = shift(grid,direction)
         @lastMove = "Down"
       when 'd'
-        grid = shiftRight(grid)
+        grid = shift(grid,direction)
         @lastMove = "Right"
       when 'r'
         reset()
@@ -100,7 +100,135 @@ module TwoThousandFortyEight
   end
 
   #-------------------------------------------------------------------------------------------------------------
-  #Shift Functions
+  #Shift Function
+  def shift(grid,direction)
+    counter = 0
+    4.times do
+      alreadyMerged = Array.new(16,0)
+      if direction.downcase == 'd'
+        tilePosition = 2+counter
+        maxTile = -1+counter
+        lastPosition = 3+counter
+      elsif direction.downcase == 'a'
+        tilePosition = 1+counter
+        maxTile = 4+counter
+        lastPosition = counter
+      elsif direction.downcase == 's'
+        tilePosition = 8+counter
+        maxTile = -4+counter
+        lastPosition = 12 + counter
+      elsif direction.downcase == 'w'
+        tilePosition = 4+counter
+        maxTile = 16+counter
+        lastPosition = counter
+      end
+
+      until tilePosition == maxTile do
+
+        if direction.downcase == 'a' || direction.downcase == 'd'
+          moveToCounter = 1
+        elsif direction.downcase =='s' || direction.downcase == 'w'
+          moveToCounter = 4
+        end
+
+        4.times do
+          if direction.downcase == 'd'
+            moveToPosition = tilePosition+moveToCounter
+            if moveToPosition > 15 then moveToPosition = 15 end               #To prevent index errors; 15 is the last position in the Grid
+            tileInfront = moveToPosition-1
+          elsif direction.downcase == 'a'
+            moveToPosition = tilePosition-moveToCounter
+            if moveToPosition > 15 then moveToPosition = 15 end               #To prevent index errors; 15 is the last position in the Grid
+            tileInfront = moveToPosition+1
+          elsif direction.downcase == 's'
+            moveToPosition = tilePosition+moveToCounter
+            if moveToPosition >= 16 && counter == 0 then moveToPosition = 12 end    
+            if moveToPosition >= 16 && counter == 1 then moveToPosition = 13 end
+            if moveToPosition >= 16 && counter == 2 then moveToPosition = 14 end
+            if moveToPosition >= 16 && counter == 3 then moveToPosition = 15 end
+            tileInfront = moveToPosition-4
+          elsif direction.downcase == 'w'
+            moveToPosition = tilePosition-moveToCounter
+            tileInfront = moveToPosition+4
+          end
+
+
+          if grid[moveToPosition] > 0                                       #If desired tile is not empty
+            if grid[moveToPosition] == grid[tilePosition]                   #If tile and desired tile contain the same number
+              if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
+                grid = merge(grid, tilePosition, moveToPosition)            
+                addPoints(grid[moveToPosition])
+                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+                break 
+              else
+                if alreadyMerged[moveToPosition] == 1                       #Else If desired tile already merged this round
+                  if tileInfront != tilePosition 
+                    if grid[tilePosition] != 0                          #If tile infront is not the same as current tile
+                      grid = moveInfront(grid, tilePosition, tileInfront)
+                      @somethingMoved = 1
+                    end
+                  end
+                  break
+                end
+              end
+            else
+              if tileInfront != tilePosition                                #If tile infront is not the same as current tile
+                if grid[tilePosition] != 0                                  #If current tile is not empty
+                  grid = moveInfront(grid, tilePosition, tileInfront)
+                  @somethingMoved = 1
+                end
+              end
+              break
+            end
+          end
+          if direction.downcase == 'a' || direction.downcase == 'd'  
+            moveToCounter += 1
+            if moveToCounter == 4                                             #If nothing happened 4 times in a row
+              if grid[tilePosition] != 0                                      #If current tile is not empty
+                moveToBack(grid, tilePosition,lastPosition)
+                @somethingMoved = 1
+                break
+              end
+            end
+          elsif direction.downcase == 's' || direction.downcase == 'w'
+            moveToCounter += 4
+            if moveToCounter == 16                                            #If nothing happened 4 times in a row
+              if grid[tilePosition] != 0                                      #If current tile is not empty
+                moveToBack(grid, tilePosition,lastPosition)
+                @somethingMoved = 1
+                break
+              end
+            end
+          end
+        end
+        if direction.downcase == 'a' || direction.downcase == 'd'
+          if tilePosition != maxTile
+            if direction.downcase == 'd' then tilePosition -= 1 end
+            if direction.downcase == 'a' then tilePosition += 1 end
+          end
+        else
+          if tilePosition >= counter
+            if direction.downcase == 's' then tilePosition -= 4 end
+            if direction.downcase == 'w' then tilePosition += 4 end
+          end
+        end
+      end
+
+      if direction.downcase == 'a' || direction.downcase == 'd'
+        if counter != 12
+          counter += 4
+        end
+      elsif direction.downcase == 's' || direction.downcase == 'w'
+        if counter != 4
+          counter += 1
+        end
+      end
+
+    end
+    return grid
+  end
+
+
   def shiftRight(grid)
     rowCounter = 0
     4.times do
@@ -470,54 +598,54 @@ module TwoThousandFortyEight
     start()
   end
 
-def addPoints(tileValue)
-    @points = @points + tileValue
-end
-
-def resetPoints()
-  @points = 0
-end
-
-def boolInput()
-  if @operatingSystem == "l"
-    system("stty raw -echo")
-    input = STDIN.getc.chr
-    system("stty -raw echo")
-  else
-    input = gets.chomp
+  def addPoints(tileValue)
+      @points = @points + tileValue
   end
 
-  return input
-end
+  def resetPoints()
+    @points = 0
+  end
 
-def loseInput()
-  puts("Do you want to restart the game? (y:Yes n:No)")
-  while true
-  input = boolInput()
-    if input.downcase == "y" || input.downcase == "n" 
-      break
+  def boolInput()
+    if @operatingSystem == "l"
+      system("stty raw -echo")
+      input = STDIN.getc.chr
+      system("stty -raw echo")
     else
-      puts("Invalid Input. Try again.")
+      input = gets.chomp
     end
-  end
-  return input
-end
 
-def winInput()
-  puts("Do you want to continue? (y:Yes n:No r:Restart)")
-  while true
+    return input
+  end
+
+  def loseInput()
+    puts("Do you want to restart the game? (y:Yes n:No)")
+    while true
     input = boolInput()
-    if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
-      break
-    else
-      puts("Invalid Input. Try again.")
+      if input.downcase == "y" || input.downcase == "n" 
+        break
+      else
+        puts("Invalid Input. Try again.")
+      end
     end
+    return input
   end
-  return input
-end
+
+  def winInput()
+    puts("Do you want to continue? (y:Yes n:No r:Restart)")
+    while true
+      input = boolInput()
+      if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
+        break
+      else
+        puts("Invalid Input. Try again.")
+      end
+    end
+    return input
+  end
 
 
-#-------------------------------------------------------------------------------------------------------------
+  #-------------------------------------------------------------------------------------------------------------
   #User Interface
   def drawInterface(grid)
     #Clears the console, prints points and the grid
