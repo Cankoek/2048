@@ -6,105 +6,105 @@ describe TwoThousandFortyEight do
   #-------------------------------------------------------------------------------------------------------------
   #ShiftRight Tests
   it "1. Basic shiftRight Test" do 
-    assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   it "2. Basic shiftRight Test" do 
-    assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   it "Basic shiftRight Merge" do
-    assert_equal [0,0,0,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([2,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   it "shiftRight with four equal tiles" do
-    assert_equal [0,0,4,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([2,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,4,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   it "shiftRight three consecutive tiles" do
-    assert_equal [0,0,2,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([0,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,2,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   it "shiftRight resulting tile cannot merge" do
-    assert_equal [0,0,8,8 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftRight([8,0,4,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,8,8 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([8,0,4,4 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"d")
   end
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftLeft Test
   it "1.Basic shiftLeft Test" do 
-    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,0,0,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   it "2. Basic shiftLeft Test" do 
-    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   it "Basic shiftLeft Merge" do
-    assert_equal [4,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([2,2,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [4,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,2,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   it "shiftLeft with four equal tiles" do
-    assert_equal [4,4,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([2,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [4,4,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   it "shiftLeft three consecutive tiles" do
-    assert_equal [4,2,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([0,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [4,2,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,2,2,2 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   it "shiftLeft resulting tile cannot merge" do
-    assert_equal [8,8,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftLeft([4,4,0,8 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [8,8,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([4,4,0,8 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"a")
   end
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftDown Test
   it "1. Basic shiftDown Test" do 
-    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shiftDown([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shift([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"s")
   end
 
   it "2. Basic shiftDown Test" do 
-    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shiftDown([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0], subject.shift([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0],"s")
   end
 
   it "Basic shiftDown Merge" do
-    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,4,0,0,0], subject.shiftDown([2,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,4,0,0,0], subject.shift([2,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0],"s")
   end
 
   it "shiftDown with four equal tiles" do
-    assert_equal [0,0,0,0 ,0,0,0,0 ,4,0,0,0 ,4,0,0,0], subject.shiftDown([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,2,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,4,0,0,0 ,4,0,0,0], subject.shift([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,2,0,0,0],"s")
   end
 
   it "shiftDown three consecutive tiles" do
-    assert_equal [0,0,0,0 ,0,0,0,0 ,2,0,0,0 ,4,0,0,0], subject.shiftDown([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,0,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,2,0,0,0 ,4,0,0,0], subject.shift([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,0,0,0,0],"s")
   end
 
   it "shiftDown resulting tile cannot merge" do
-    assert_equal [0,0,0,0 ,0,0,0,0 ,8,0,0,0 ,8,0,0,0], subject.shiftDown([8,0,0,0 ,0,0,0,0 ,4,0,0,0 ,4,0,0,0])
+    assert_equal [0,0,0,0 ,0,0,0,0 ,8,0,0,0 ,8,0,0,0], subject.shift([8,0,0,0 ,0,0,0,0 ,4,0,0,0 ,4,0,0,0],"s")
   end
 
   #-------------------------------------------------------------------------------------------------------------
   #ShiftUp Test
   it "1. Basic shiftUp Test" do 
-    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0])
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,2,0,0,0],"w")
   end
 
   it "2. Basic shiftUp Test" do 
-    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal [2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0],"w")
   end
 
   it "Basic shiftUp Merge" do
-    assert_equal [4,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([0,0,0,0 ,0,0,0,0 ,2,0,0,0 ,2,0,0,0])
+    assert_equal [4,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([0,0,0,0 ,0,0,0,0 ,2,0,0,0 ,2,0,0,0],"w")
   end
 
   it "shiftUp with four equal tiles" do
-    assert_equal [4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,2,0,0,0])
+    assert_equal [4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,2,0,0,0],"w")
   end
 
   it "shiftUp three consecutive tiles" do
-    assert_equal [4,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,0,0,0,0])
+    assert_equal [4,0,0,0 ,2,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([2,0,0,0 ,2,0,0,0 ,2,0,0,0 ,0,0,0,0],"w")
   end
 
   it "shiftUp resulting tile cannot merge" do
-    assert_equal [8,0,0,0 ,8,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shiftUp([4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,8,0,0,0])
+    assert_equal [8,0,0,0 ,8,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,8,0,0,0],"w")
   end
 
   #-------------------------------------------------------------------------------------------------------------
