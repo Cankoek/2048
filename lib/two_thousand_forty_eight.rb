@@ -10,7 +10,7 @@ module TwoThousandFortyEight
     system "cls" && "clear"
     puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
     @operatingSystem = gets.chomp
-    @operatingSystem.downcase == "w" || @operatingSystem.downcase == "l" ? start() : self.run
+    "wl".include? @operatingSystem.downcase ? start() : self.run
     true
   end
   
@@ -18,25 +18,26 @@ module TwoThousandFortyEight
     grid = Array.new(16,0)
     grid[0] = 1024
     grid[1] = 1024
-
     2.times do gridArray = addRandomNumber(grid) end
     while true
       if checkLose(grid) == true
         drawInterface(grid)
-        puts("Do you want to restart the game? (y:Yes n:No)\n")
-        if boolInput.downcase == 'y' then reset() else exit() end
+        puts("You lost! You have to moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
+        if userInput("yn").downcase == 'y' then reset() else exit() end
       end
 
       if @alreadyWon == 0 && checkWin(grid) == true
         drawInterface(grid)
         print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
-        if boolInput == 'n' then exit() end
+        if userInput("yn").downcase == 'n' then exit() end
       end
 
       drawInterface(grid)
-      @somethingMoved, direction = 0, userInput
+      puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
+      @somethingMoved, direction = 0, userInput("wasder")
 
-      if direction == "w" || direction == 'a' || direction == 's' || direction == 'd' then grid = shift(grid,direction) end
+      if "wasd".include? direction.downcase then grid = shift(grid,direction) end
+      #if direction == "w" || direction == 'a' || direction == 's' || direction == 'd' then grid = shift(grid,direction) end
       if direction == 'r' then reset() elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
@@ -99,7 +100,6 @@ module TwoThousandFortyEight
             if grid[moveToPosition] == grid[tilePosition]                   #If tile and desired tile contain the same number
               if alreadyMerged[moveToPosition] == 0                         #If desired tile did not merge yet this round
                 grid = merge(grid, tilePosition, moveToPosition)            
-                addPoints(grid[moveToPosition])
                 alreadyMerged[moveToPosition],@somethingMoved = 1, 1
                 break 
               else
@@ -171,6 +171,7 @@ module TwoThousandFortyEight
     #Merge Numbers into desired tile, reset current tile
     grid[moveToPosition] = 2*grid[tilePosition]
     grid[tilePosition] = 0
+    @points = @points + grid[moveToPosition]
     return grid
   end
 
@@ -205,9 +206,8 @@ module TwoThousandFortyEight
     return grid
   end
 
-  def userInput()
+  def userInput(inputrange)
     #Checks constantly for userinput
-    puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
     while true
       if @operatingSystem == "l"
         system("stty raw -echo")
@@ -216,11 +216,8 @@ module TwoThousandFortyEight
       else
         input = gets.chomp
       end
-      if input.downcase == "w" || input.downcase == "a" || input.downcase == "s" || input.downcase == "d" || input.downcase == "e" || input.downcase == "r"
-        break
-      else
-        puts("Invalid Input. Try again.")
-      end
+      if inputrange.include? input.downcase then break else puts("Invalid Input. Try again.") end
+
     end
     return input
   end
@@ -271,38 +268,13 @@ module TwoThousandFortyEight
     start()
   end
 
-  def addPoints(tileValue)
-      @points = @points + tileValue
-  end
-
-  def boolInput()
-    while true
-      if @operatingSystem == "l"
-        system("stty raw -echo")
-        input = STDIN.getc.chr
-        system("stty -raw echo")
-      else
-        input = gets.chomp
-      end
-      if input.downcase == "y" or input.downcase == "n" 
-        return input
-      else 
-        puts"Invalid Input. Try again."
-      end
-    end
-  end
-
-
-
-
   #-------------------------------------------------------------------------------------------------------------
   #User Interface
   def drawInterface(grid)
     #Clears the console, prints points and the grid
     system "cls" && "clear"
     !checkLose(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
-    counter = 0
-    16.times do
+    for counter in 0..15 do
       if grid[counter] == 0
         print("[    ", "] ")
       elsif grid[counter] > 0 && grid[counter] < 10
