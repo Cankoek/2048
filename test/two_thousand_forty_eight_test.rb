@@ -106,15 +106,7 @@ describe TwoThousandFortyEight do
   it "shiftUp resulting tile cannot merge" do
     assert_equal [8,0,0,0 ,8,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,8,0,0,0],"w")
   end
-
-  #-------------------------------------------------------------------------------------------------------------
-  #Points test
-
-  it "Point Counter test" do
-    subject.resetPoints()
-    assert_equal 4, subject.addPoints(4)
-  end
-
+  
   #-------------------------------------------------------------------------------------------------------------
   #Loose Test
   it "Lose test >> Actual lose" do
