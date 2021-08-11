@@ -15,61 +15,32 @@ module TwoThousandFortyEight
   end
   
   def self.start()
-    @points = 0
-    gridArray = Array.new(16,0)
-    2.times do 
-      gridArray = addRandomNumber(gridArray) 
-    end
-    routine(gridArray)
-  end
+    grid = Array.new(16,0)
+    grid[0] = 1024
+    grid[1] = 1024
 
-  #Game Routine
-
-  def self.routine(grid)
+    2.times do gridArray = addRandomNumber(grid) end
     while true
-      @somethingMoved = 0
-      drawInterface(grid)
-
-      direction = userInput()
-      case direction.downcase
-      when 'w'
-        grid = shift(grid,direction)
-        @lastMove = "Up"
-      when 'a'
-        grid = shift(grid,direction)
-        @lastMove = "Left"
-      when 's' 
-        grid = shift(grid,direction)
-        @lastMove = "Down"
-      when 'd'
-        grid = shift(grid,direction)
-        @lastMove = "Right"
-      when 'r'
-        reset()
-      when 'e'
-        exit()
-      end
-
-      if @alreadyWon == 0
-        if checkWin(grid) == true 
-          print("\nCongratulations! You've beat 2048.\n")
-          case winInput.downcase
-          when 'r'
-            reset()
-          when 'n'
-            exit()
-          end
-        end
-      end
-
       if checkLose(grid) == true
         drawInterface(grid)
-        if loseInput.downcase == 'y' then reset() else exit() end
+        puts("Do you want to restart the game? (y:Yes n:No)\n")
+        if boolInput.downcase == 'y' then reset() else exit() end
       end
+
+      if @alreadyWon == 0 && checkWin(grid) == true
+        drawInterface(grid)
+        print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
+        if boolInput == 'n' then exit() end
+      end
+
+      drawInterface(grid)
+      @somethingMoved, direction = 0, userInput
+
+      if direction == "w" || direction == 'a' || direction == 's' || direction == 'd' then grid = shift(grid,direction) end
+      if direction == 'r' then reset() elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
       if @somethingMoved == 1 then grid = addRandomNumber(grid) end           
-
       sleep(0.01)
     end
   end
@@ -81,18 +52,22 @@ module TwoThousandFortyEight
     4.times do
       alreadyMerged = Array.new(16,0)
       if direction.downcase == 'd'
+        @lastMove = 'Right'
         tilePosition = 2+counter
         maxTile = -1+counter
         lastPosition = 3+counter
       elsif direction.downcase == 'a'
+        @lastMove = 'Left'
         tilePosition = 1+counter
         maxTile = 4+counter
         lastPosition = counter
       elsif direction.downcase == 's'
+        @lastMove = 'Down'
         tilePosition = 8+counter
         maxTile = -4+counter
         lastPosition = 12 + counter
       elsif direction.downcase == 'w'
+        @lastMove = 'Up'
         tilePosition = 4+counter
         maxTile = 16+counter
         lastPosition = counter
@@ -265,8 +240,7 @@ module TwoThousandFortyEight
       return false
     end
     #Check every tile if it has a neighbour-tiles which contain the same number
-    counter = 0
-    16.times do
+    for counter in (0..15) do
       if counter < 15 && counter != 3 && counter != 7 && counter != 11
         plusone = counter + 1
         if grid[plusone] == grid[counter] then return false end
@@ -293,8 +267,7 @@ module TwoThousandFortyEight
 
   def reset()
     #Resets points and starts again
-    resetPoints()
-    @alreadyWon = 0
+    @alreadyWon,@points = 0, 0
     start()
   end
 
@@ -302,47 +275,24 @@ module TwoThousandFortyEight
       @points = @points + tileValue
   end
 
-  def resetPoints()
-    @points = 0
-  end
-
   def boolInput()
-    if @operatingSystem == "l"
-      system("stty raw -echo")
-      input = STDIN.getc.chr
-      system("stty -raw echo")
-    else
-      input = gets.chomp
-    end
-
-    return input
-  end
-
-  def loseInput()
-    puts("Do you want to restart the game? (y:Yes n:No)")
     while true
-    input = boolInput()
-      if input.downcase == "y" || input.downcase == "n" 
-        break
+      if @operatingSystem == "l"
+        system("stty raw -echo")
+        input = STDIN.getc.chr
+        system("stty -raw echo")
       else
-        puts("Invalid Input. Try again.")
+        input = gets.chomp
+      end
+      if input.downcase == "y" or input.downcase == "n" 
+        return input
+      else 
+        puts"Invalid Input. Try again."
       end
     end
-    return input
   end
 
-  def winInput()
-    puts("Do you want to continue? (y:Yes n:No r:Restart)")
-    while true
-      input = boolInput()
-      if input.downcase == "y" || input.downcase == "n" || input.downcase == "r" 
-        break
-      else
-        puts("Invalid Input. Try again.")
-      end
-    end
-    return input
-  end
+
 
 
   #-------------------------------------------------------------------------------------------------------------
