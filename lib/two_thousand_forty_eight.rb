@@ -8,6 +8,7 @@ module TwoThousandFortyEight
   #Start functions
   def self.run
     system "cls" && "clear"
+    #Input for OS, needed for input
     puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
     @operatingSystem = gets.chomp
     "wl".include? @operatingSystem.downcase ? start() : self.run
@@ -16,16 +17,16 @@ module TwoThousandFortyEight
   
   def self.start()
     grid = Array.new(16,0)
-    grid[0] = 1024
-    grid[1] = 1024
     2.times do gridArray = addRandomNumber(grid) end
     while true
+      #Check lose
       if checkLose(grid) == true
         drawInterface(grid)
         puts("You lost! You have to moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
         if userInput("yn").downcase == 'y' then reset() else exit() end
       end
 
+      #Check win
       if @alreadyWon == 0 && checkWin(grid) == true
         drawInterface(grid)
         print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
@@ -36,8 +37,8 @@ module TwoThousandFortyEight
       puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
       @somethingMoved, direction = 0, userInput("wasder")
 
+      #Check input
       if "wasd".include? direction.downcase then grid = shift(grid,direction) end
-      #if direction == "w" || direction == 'a' || direction == 's' || direction == 'd' then grid = shift(grid,direction) end
       if direction == 'r' then reset() elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
@@ -49,6 +50,7 @@ module TwoThousandFortyEight
   #-------------------------------------------------------------------------------------------------------------
   #Shift Function
   def shift(grid,direction)
+    #For each direction different values for variables. 
     counter = 0
     4.times do
       alreadyMerged = Array.new(16,0)
@@ -105,7 +107,7 @@ module TwoThousandFortyEight
               else
                 if alreadyMerged[moveToPosition] == 1                       #Else If desired tile already merged this round
                   if tileInfront != tilePosition 
-                    if grid[tilePosition] != 0                          #If tile infront is not the same as current tile
+                    if grid[tilePosition] != 0                              #If tile infront is not the same as current tile
                       grid = moveInfront(grid, tilePosition, tileInfront)
                       @somethingMoved = 1
                     end
@@ -168,7 +170,7 @@ module TwoThousandFortyEight
 
   #Move functions
   def merge(grid,tilePosition, moveToPosition)
-    #Merge Numbers into desired tile, reset current tile
+    #Merge Numbers into desired tile, reset current tile and add points
     grid[moveToPosition] = 2*grid[tilePosition]
     grid[tilePosition] = 0
     @points = @points + grid[moveToPosition]
@@ -216,6 +218,7 @@ module TwoThousandFortyEight
       else
         input = gets.chomp
       end
+      #Checks if input is in desired inputrange
       if inputrange.include? input.downcase then break else puts("Invalid Input. Try again.") end
 
     end
