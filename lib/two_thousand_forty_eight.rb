@@ -7,7 +7,8 @@ module TwoThousandFortyEight
 
   #Start functions
   def self.run
-    system "cls" && "clear"
+    system "cls"
+    system "clear"
     #Input for OS, needed for input
     puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
     @operatingSystem = gets.chomp
@@ -275,7 +276,8 @@ module TwoThousandFortyEight
   #User Interface
   def drawInterface(grid)
     #Clears the console, prints points and the grid
-    system "cls" && "clear"
+    system "cls"
+    system "clear"
     !checkLose(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
     for counter in 0..15 do
       if grid[counter] == 0
