@@ -23,7 +23,7 @@ module TwoThousandFortyEight
       #Check lose
       if checkLose(grid) == true
         drawInterface(grid)
-        puts("You lost! You have to moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
+        puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
         if userInput("yn").downcase == 'y' then reset() else exit() end
       end
 
@@ -294,6 +294,6 @@ module TwoThousandFortyEight
       if counter == 3 or counter == 7 or counter == 11 or counter == 15 then print("\n") end
       counter += 1
     end
-    !checkLose(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points\n\n")
+    !checkLose(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points.\n\n")
   end
 end
