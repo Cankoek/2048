@@ -20,18 +20,18 @@ module TwoThousandFortyEight
     grid = Array.new(16,0)
     2.times do gridArray = addRandomNumber(grid) end
     while true
-      #Check lose
-      if checkLose(grid) == true
-        drawInterface(grid)
-        puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
-        if userInput("yn").downcase == 'y' then reset() else exit() end
-      end
-
       #Check win
       if @alreadyWon == 0 && checkWin(grid) == true
         drawInterface(grid)
         print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
         if userInput("yn").downcase == 'n' then exit() end
+      end
+
+      #Check lose
+      if checkLose(grid) == true
+        drawInterface(grid)
+        puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
+        if userInput("yn").downcase == 'y' then reset() else exit() end
       end
 
       drawInterface(grid)
@@ -195,15 +195,13 @@ module TwoThousandFortyEight
   #Help functions
   def addRandomNumber(grid)
     #Adds random Number to random empty tile
-    while true
-      if grid.include? 0
+    if grid.include? 0
+      while true
         randvalue = rand(0..15)
         if grid[randvalue] == 0
           grid[randvalue] = rand(0.0..1.0) < 0.9 ? 2 : 4
           break
         end
-      else
-        break
       end
     end
     return grid
