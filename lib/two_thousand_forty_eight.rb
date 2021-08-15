@@ -9,14 +9,6 @@ module TwoThousandFortyEight
   def self.run
     system "cls"
     system "clear"
-    #Input for OS, needed for input
-    puts("\nPlease choose your operating system: (w:Windows  l:Linux)")
-    @operatingSystem = gets.chomp
-    "wl".include? @operatingSystem.downcase ? start() : self.run
-    true
-  end
-  
-  def self.start()
     grid = Array.new(16,0)
     2.times do gridArray = addRandomNumber(grid) end
     while true
@@ -35,7 +27,7 @@ module TwoThousandFortyEight
       end
 
       drawInterface(grid)
-      puts("w:Up a:Left s:Down d:Right r:Restart e:End\n")
+      puts("\nw:Up a:Left s:Down d:Right r:Restart e:End\n")
       @somethingMoved, direction = 0, userInput("wasder")
 
       #Check input
@@ -46,6 +38,7 @@ module TwoThousandFortyEight
       if @somethingMoved == 1 then grid = addRandomNumber(grid) end           
       sleep(0.01)
     end
+    true
   end
 
   #-------------------------------------------------------------------------------------------------------------
@@ -208,18 +201,12 @@ module TwoThousandFortyEight
   end
 
   def userInput(inputrange)
+    require "io/console"
     #Checks constantly for userinput
     while true
-      if @operatingSystem == "l"
-        system("stty raw -echo")
-        input = STDIN.getc.chr
-        system("stty -raw echo")
-      else
-        input = gets.chomp
-      end
-      #Checks if input is in desired inputrange
+      input = STDIN.getch
+      #Checks if input is in inputrange
       if inputrange.include? input.downcase then break else puts("Invalid Input. Try again.") end
-
     end
     return input
   end
@@ -267,7 +254,7 @@ module TwoThousandFortyEight
   def reset()
     #Resets points and starts again
     @alreadyWon,@points = 0, 0
-    start()
+    run()
   end
 
   #-------------------------------------------------------------------------------------------------------------
