@@ -9,14 +9,14 @@ module TwoThousandFortyEight
   YES = 'y'
   NO = 'n'
 
-  @somethingMoved = 0
-  @points = 0
-  @alreadyWon = 0
-
   #Start functions
   def self.run
     system "cls"
     system "clear"
+    @somethingMoved = 0
+    @points = 0
+    @alreadyWon = 0
+
     grid = Array.new(16,0)
     2.times do gridArray = addRandomNumber(grid) end
 
@@ -25,14 +25,14 @@ module TwoThousandFortyEight
       if @alreadyWon == 0 && won?(grid)
         drawInterface(grid)
         print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
-        exit() if userInput("yn").downcase == 'n'
+        exit() if userInput("yn").downcase == NO
       end
 
       #Check lose
       if lost?(grid)
         drawInterface(grid)
         puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
-        if userInput("yn").downcase == 'y' then reset()
+        if userInput("yn").downcase == YES then run
         else exit() end
       end
 
@@ -43,9 +43,8 @@ module TwoThousandFortyEight
 
       #Check input
       grid = shift(grid,direction) if "wasd".include? direction.downcase
-      #if "wasd".include? direction.downcase then grid = shift(grid,direction) end
 
-      if direction == 'r' then reset() 
+      if direction == 'r' then run
       elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
@@ -104,7 +103,7 @@ module TwoThousandFortyEight
           end
 
         end
-        tilePosition = retTilePosition(direction,tilePosition,maxTile,counter)
+        tilePosition = returnTilePosition(direction,tilePosition,maxTile,counter)
       end
 
       case direction.downcase
@@ -165,7 +164,7 @@ module TwoThousandFortyEight
     valueArray = [tilePosition, maxTile, lastPosition]
   end
 
-  def retTilePosition(direction,tilePosition,maxTile,counter)
+  def returnTilePosition(direction,tilePosition,maxTile,counter)
     case direction.downcase
     when MOVE_RIGHT 
       tilePosition -= 1 if tilePosition != maxTile
@@ -254,32 +253,25 @@ module TwoThousandFortyEight
     for counter in (0..15) do
       if counter < 15 && counter != 3 && counter != 7 && counter != 11
         plusone = counter + 1
-        return false if grid[plusone] == grid[counter]
+        return false if grid[counter + 1] == grid[counter]
       end
 
       if counter > 0 && counter != 4 && counter != 8 && counter != 12
         minusone = counter - 1
-        return false if grid[minusone] == grid[counter]
+        return false if grid[counter - 1] == grid[counter]
       end
 
       if counter < 12
         plusfour = counter + 4
-        return false if grid[plusfour] == grid[counter]
+        return false if grid[counter + 4] == grid[counter]
       end
 
       if counter > 3
         minusfour = counter - 4
-        return false if grid[minusfour] == grid[counter]
+        return false if grid[counter - 4] == grid[counter]
       end
     end
     return true
-  end
-
-  def reset
-    #Resets points and starts again
-    @alreadyWon = 0
-    @points = 0
-    run()
   end
 
   #-------------------------------------------------------------------------------------------------------------
@@ -288,7 +280,12 @@ module TwoThousandFortyEight
     #Clears the console, prints points and the grid
     system "cls"
     system "clear"
-    !lost?(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
+    if lost?(grid) == false
+      print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n")
+    else
+      print("\n\n")
+    end
+
     for counter in 0..15 do
       if grid[counter] == 0
         print("[    ", "] ")
@@ -304,6 +301,10 @@ module TwoThousandFortyEight
       if counter == 3 or counter == 7 or counter == 11 or counter == 15 then print("\n") end
       counter += 1
     end
-    !lost?(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points.\n\n")
+    if lost?(grid) == true
+      print("\n\nYou've reached ", @points, " Points.\n\n")
+    else
+      print("\n")
+    end
   end
 end
