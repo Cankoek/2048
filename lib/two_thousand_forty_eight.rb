@@ -16,7 +16,6 @@ module TwoThousandFortyEight
     @somethingMoved = 0
     @points = 0
     @alreadyWon = 0
-
     grid = Array.new(16,0)
     2.times do gridArray = addRandomNumber(grid) end
 
@@ -48,7 +47,7 @@ module TwoThousandFortyEight
       elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
-      #addRandomNumber(grid) if @somethingMoved == 1
+      addRandomNumber(grid) if @somethingMoved == 1
       sleep(0.01)
     end
     true
@@ -71,13 +70,15 @@ module TwoThousandFortyEight
 
         moveToCounter = 1 if direction.downcase == MOVE_RIGHT || direction.downcase == MOVE_LEFT
         moveToCounter = 4 if direction.downcase == MOVE_UP || direction.downcase == MOVE_DOWN
-
+        
+      
         4.times do
+          break if grid[tilePosition] == 0
           positionvalues = positionVariables(direction, tilePosition,moveToCounter)
           moveToPosition = positionvalues[0]
           tileInfront = positionvalues[1]
 
-          if grid[moveToPosition] > 0                                       #
+          if grid[moveToPosition] > 0                                    
             if grid[moveToPosition] == grid[tilePosition] 
               case alreadyMerged[moveToPosition]
               when 0
@@ -101,7 +102,6 @@ module TwoThousandFortyEight
             moveToBack(grid, tilePosition,lastPosition)
             break
           end
-
         end
         tilePosition = returnTilePosition(direction,tilePosition,maxTile,counter)
       end
@@ -178,6 +178,7 @@ module TwoThousandFortyEight
   end
 
   #Move functions
+
   def merge(grid,tilePosition, moveToPosition)
     #Merge Numbers into desired tile, reset current tile and add points
     grid[moveToPosition] = 2*grid[tilePosition]
@@ -294,7 +295,7 @@ module TwoThousandFortyEight
       if counter == 3 or counter == 7 or counter == 11 or counter == 15 then print("\n") end
       counter += 1
     end
-    if lost?(grid) == true
+    if lost?(grid)
       print("\n\nYou've reached ", @points, " Points.\n\n")
     else
       print("\n")
