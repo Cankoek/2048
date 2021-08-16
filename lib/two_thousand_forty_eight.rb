@@ -48,7 +48,7 @@ module TwoThousandFortyEight
       elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
-      addRandomNumber(grid) if @somethingMoved == 1
+      #addRandomNumber(grid) if @somethingMoved == 1
       sleep(0.01)
     end
     true
@@ -133,7 +133,7 @@ module TwoThousandFortyEight
       tileInfront = moveToPosition+4
     end
     moveToPosition = 15 if moveToPosition > 15
-    positionArray = [moveToPosition, tileInfront]
+    return positionArray = [moveToPosition, tileInfront]
   end
   
   #Functions to make shift function more organized
@@ -161,7 +161,7 @@ module TwoThousandFortyEight
       maxTile = -4+counter
       lastPosition = 12 + counter
     end
-    valueArray = [tilePosition, maxTile, lastPosition]
+    return valueArray = [tilePosition, maxTile, lastPosition]
   end
 
   def returnTilePosition(direction,tilePosition,maxTile,counter)
@@ -250,24 +250,17 @@ module TwoThousandFortyEight
       return false
     end
     #Check every tile if it has a neighbour-tiles which contain the same number
-    for counter in (0..15) do
+    for counter in 0..15 do
       if counter < 15 && counter != 3 && counter != 7 && counter != 11
-        plusone = counter + 1
         return false if grid[counter + 1] == grid[counter]
       end
-
       if counter > 0 && counter != 4 && counter != 8 && counter != 12
-        minusone = counter - 1
         return false if grid[counter - 1] == grid[counter]
       end
-
       if counter < 12
-        plusfour = counter + 4
         return false if grid[counter + 4] == grid[counter]
       end
-
       if counter > 3
-        minusfour = counter - 4
         return false if grid[counter - 4] == grid[counter]
       end
     end
