@@ -61,29 +61,12 @@ module TwoThousandFortyEight
     #For each direction different values for variables. 
     counter = 0
     4.times do
+      directionvalues = directionVariables(direction,counter)
+
       alreadyMerged = Array.new(16,0)
-      case direction.downcase
-      when MOVE_RIGHT
-        @lastMove = 'Right'
-        tilePosition = 2+counter
-        maxTile = -1+counter
-        lastPosition = 3+counter
-      when MOVE_LEFT
-        @lastMove = 'Left'
-        tilePosition = 1+counter
-        maxTile = 4+counter
-        lastPosition = counter
-      when MOVE_UP
-        @lastMove = 'Up'
-        tilePosition = 4+counter
-        maxTile = 16+counter
-        lastPosition = counter
-      when MOVE_DOWN
-        @lastMove = 'Down'
-        tilePosition = 8+counter
-        maxTile = -4+counter
-        lastPosition = 12 + counter
-      end
+      tilePosition = directionvalues[0]
+      maxTile = directionvalues[1]
+      lastPosition = directionvalues[2]
 
       until tilePosition == maxTile do
 
@@ -91,27 +74,16 @@ module TwoThousandFortyEight
         moveToCounter = 4 if direction.downcase == MOVE_UP || direction.downcase == MOVE_DOWN
 
         4.times do
-          if direction.downcase == MOVE_RIGHT
-            moveToPosition = tilePosition+moveToCounter
-            tileInfront = moveToPosition-1
-          elsif direction.downcase == MOVE_LEFT
-            moveToPosition = tilePosition-moveToCounter
-            tileInfront = moveToPosition+1
-          elsif direction.downcase == MOVE_DOWN
-            moveToPosition = tilePosition+moveToCounter
-            tileInfront = moveToPosition-4
-          elsif direction.downcase == MOVE_UP
-            moveToPosition = tilePosition-moveToCounter
-            tileInfront = moveToPosition+4
-          end
-          moveToPosition = 15 if moveToPosition > 15
+          positionvalues = positionVariables(direction, tilePosition,moveToCounter)
+          moveToPosition = positionvalues[0]
+          tileInfront = positionvalues[1]
 
           if grid[moveToPosition] > 0                                       #
-            if grid[moveToPosition] == grid[tilePosition]   
+            if grid[moveToPosition] == grid[tilePosition] 
               case alreadyMerged[moveToPosition]
               when 0
                 grid = merge(grid, tilePosition, moveToPosition)            
-                alreadyMerged[moveToPosition],@somethingMoved = 1, 1
+                alreadyMerged[moveToPosition]= 1
                 break 
               when 1
                 grid = moveInfront(grid, tilePosition, tileInfront)
@@ -122,27 +94,16 @@ module TwoThousandFortyEight
               break 
             end
           end
-          if direction.downcase == MOVE_LEFT || direction.downcase == MOVE_RIGHT  
-            moveToCounter += 1
-            if moveToCounter == 4                                             
-              if grid[tilePosition] != 0                                      
-                moveToBack(grid, tilePosition,lastPosition)
-                @somethingMoved = 1
-                break
-              end
-            end
-          elsif direction.downcase == MOVE_DOWN || direction.downcase == MOVE_UP
-            moveToCounter += 4
-            if moveToCounter == 16                                            
-              if grid[tilePosition] != 0                                     
-                moveToBack(grid, tilePosition,lastPosition)
-                @somethingMoved = 1
-                break
-              end
-            end
-          end
-        end
 
+          valueToAdd = 1 if direction.downcase == MOVE_LEFT || direction.downcase == MOVE_RIGHT
+          valueToAdd = 4 if direction.downcase == MOVE_DOWN || direction.downcase == MOVE_UP
+          moveToCounter += valueToAdd
+          if moveToCounter == 4*valueToAdd
+            moveToBack(grid, tilePosition,lastPosition)
+            break
+          end
+
+        end
         tilePosition = retTilePosition(direction,tilePosition,maxTile,counter)
       end
 
@@ -155,6 +116,53 @@ module TwoThousandFortyEight
 
     end
     return grid
+  end
+
+  def positionVariables(direction,tilePosition,moveToCounter)
+    case direction.downcase
+    when MOVE_RIGHT
+      moveToPosition = tilePosition+moveToCounter
+      tileInfront = moveToPosition-1
+    when MOVE_LEFT
+      moveToPosition = tilePosition-moveToCounter
+      tileInfront = moveToPosition+1
+    when MOVE_DOWN
+      moveToPosition = tilePosition+moveToCounter
+      tileInfront = moveToPosition-4
+    when MOVE_UP
+      moveToPosition = tilePosition-moveToCounter
+      tileInfront = moveToPosition+4
+    end
+    moveToPosition = 15 if moveToPosition > 15
+    positionArray = [moveToPosition, tileInfront]
+  end
+  
+  #Functions to make shift function more organized
+
+  def directionVariables(direction,counter)
+    case direction.downcase
+    when MOVE_RIGHT
+      @lastMove = 'Right'
+      tilePosition = 2+counter
+      maxTile = -1+counter
+      lastPosition = 3+counter
+    when MOVE_LEFT
+      @lastMove = 'Left'
+      tilePosition = 1+counter
+      maxTile = 4+counter
+      lastPosition = counter
+    when MOVE_UP
+      @lastMove = 'Up'
+      tilePosition = 4+counter
+      maxTile = 16+counter
+      lastPosition = counter
+    when MOVE_DOWN
+      @lastMove = 'Down'
+      tilePosition = 8+counter
+      maxTile = -4+counter
+      lastPosition = 12 + counter
+    end
+    valueArray = [tilePosition, maxTile, lastPosition]
   end
 
   def retTilePosition(direction,tilePosition,maxTile,counter)
@@ -170,14 +178,13 @@ module TwoThousandFortyEight
     end
   end
 
-
-
   #Move functions
   def merge(grid,tilePosition, moveToPosition)
     #Merge Numbers into desired tile, reset current tile and add points
     grid[moveToPosition] = 2*grid[tilePosition]
     grid[tilePosition] = 0
     @points = @points + grid[moveToPosition]
+    @somethingMoved = 1
     return grid
   end
 
@@ -194,10 +201,13 @@ module TwoThousandFortyEight
   end
 
   def moveToBack(grid, tilePosition, lastPosition)
+    if grid[tilePosition] != 0 
     #Move current tile to last possible tile
-    grid[lastPosition] = grid[tilePosition]
-    grid[tilePosition] = 0
-    return grid
+      grid[lastPosition] = grid[tilePosition]
+      grid[tilePosition] = 0
+      @somethingMoved = 1
+      return grid
+    end
   end
 
   #Help functions
@@ -265,7 +275,7 @@ module TwoThousandFortyEight
     return true
   end
 
-  def reset()
+  def reset
     #Resets points and starts again
     @alreadyWon = 0
     @points = 0
