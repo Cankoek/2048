@@ -1,3 +1,5 @@
+require "io/console"
+MOVE_LEFT = 'a'
 module TwoThousandFortyEight
   extend self
 
@@ -13,26 +15,31 @@ module TwoThousandFortyEight
     2.times do gridArray = addRandomNumber(grid) end
     while true
       #Check win
-      if @alreadyWon == 0 && checkWin(grid) == true
+      if @alreadyWon == 0 && won?(grid)
         drawInterface(grid)
         print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
         if userInput("yn").downcase == 'n' then exit() end
       end
 
       #Check lose
-      if checkLose(grid) == true
+      if lost?(grid)
         drawInterface(grid)
         puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
-        if userInput("yn").downcase == 'y' then reset() else exit() end
+        if userInput("yn").downcase == 'y' then reset()
+        else exit() end
       end
+
 
       drawInterface(grid)
       puts("\nw:Up a:Left s:Down d:Right r:Restart e:End\n")
       @somethingMoved, direction = 0, userInput("wasder")
 
       #Check input
-      if "wasd".include? direction.downcase then grid = shift(grid,direction) end
-      if direction == 'r' then reset() elsif direction == 'e' then exit end
+      grid = shift(grid,direction) if "wasd".include? direction.downcase
+      #if "wasd".include? direction.downcase then grid = shift(grid,direction) end
+
+      if direction == 'r' then reset() 
+      elsif direction == 'e' then exit end
 
       #If anything moved, adds a new random number to the grid
       if @somethingMoved == 1 then grid = addRandomNumber(grid) end           
@@ -201,7 +208,6 @@ module TwoThousandFortyEight
   end
 
   def userInput(inputrange)
-    require "io/console"
     #Checks constantly for userinput
     while true
       input = STDIN.getch
@@ -211,7 +217,7 @@ module TwoThousandFortyEight
     return input
   end
 
-  def checkWin(grid)
+  def won?(grid)
     #If array contains 2048, you've won
     if grid.include? 2048
       @alreadyWon = 1
@@ -220,7 +226,7 @@ module TwoThousandFortyEight
     return false
   end
 
-  def checkLose(grid)
+  def lost?(grid)
     #Check if grid has no empty tiles
     if grid.include? 0
       return false
@@ -246,7 +252,6 @@ module TwoThousandFortyEight
         minusfour = counter + 4
         if grid[minusfour] == grid[counter] then return false end
       end
-      counter += 1
     end
     return true
   end
@@ -263,7 +268,7 @@ module TwoThousandFortyEight
     #Clears the console, prints points and the grid
     system "cls"
     system "clear"
-    !checkLose(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
+    !lost?(grid) ? print("\nPoints: ", @points, "\tLast move: ", @lastMove, "\n\n") : print("\n\n")
     for counter in 0..15 do
       if grid[counter] == 0
         print("[    ", "] ")
@@ -279,6 +284,6 @@ module TwoThousandFortyEight
       if counter == 3 or counter == 7 or counter == 11 or counter == 15 then print("\n") end
       counter += 1
     end
-    !checkLose(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points.\n\n")
+    !lost?(grid) ? print("\n") : print("\n\nYou've reached ", @points, " Points.\n\n")
   end
 end
