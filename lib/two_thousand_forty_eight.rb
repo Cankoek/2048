@@ -8,16 +8,18 @@ module TwoThousandFortyEight
   MOVE_DOWN = 's'
   YES = 'y'
   NO = 'n'
-  #Start functions
+
+  #Start function
   def self.run
-    system "cls"
-    system "clear"
     newGame = Game.new
     true
   end
-
+  #-------------------------------------------------------------------------------------------------------------
+  #Game function
   class Game
     def initialize
+      system "cls"
+      system "clear"
       $somethingmoved = 0
       $points = 0
       $alreadyWon = 0
@@ -28,24 +30,26 @@ module TwoThousandFortyEight
     def routine(grid)
       helperFunctions = Helper.new
       mover = Mover.new
+      ui = UserInterface.new
+      
       2.times do gridArray = helperFunctions.addRandomNumber(grid) end
       while true
         #Check win
         if $alreadyWon == 0 && helperFunctions.won?(grid)
-          UserInterface.new(grid)
+          ui.draw(grid)
           print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
           exit() if helperFunctions.userInput("yn").downcase == NO
         end
 
         #Check lose
         if helperFunctions.lost?(grid)
-          UserInterface.new(grid)
+          ui.draw(grid)
           puts("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
           if helperFunctions.userInput("yn").downcase == YES then Game.new
           else exit() end
         end
 
-        UserInterface.new(grid)
+        ui.draw(grid)
         puts("\nw:Up a:Left s:Down d:Right r:Restart e:End\n")
         $somethingmoved = 0
         direction = helperFunctions.userInput("wasder")
@@ -62,6 +66,7 @@ module TwoThousandFortyEight
     end
   end
   #-------------------------------------------------------------------------------------------------------------
+  #Shift function and shift helper
   class Mover
     #Shift Function
     def shift(grid,direction)
@@ -277,14 +282,9 @@ module TwoThousandFortyEight
     end
   end
   #-------------------------------------------------------------------------------------------------------------
-  #User Interface
+  #Userinterface
   class UserInterface
-
-    def initialize(grid)
-        drawInterface(grid)
-    end
-     
-    def drawInterface(grid)
+    def draw(grid)
       #Clears the console, prints points and the grid
       system "cls"
       system "clear"
