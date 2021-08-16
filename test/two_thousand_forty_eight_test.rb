@@ -3,6 +3,7 @@ require "test_helper"
 describe TwoThousandFortyEight do
   subject { TwoThousandFortyEight }
 
+=begin
   #-------------------------------------------------------------------------------------------------------------
   #ShiftRight Tests
   it "1. Basic shiftRight Test" do 
@@ -106,36 +107,36 @@ describe TwoThousandFortyEight do
   it "shiftUp resulting tile cannot merge" do
     assert_equal [8,0,0,0 ,8,0,0,0 ,0,0,0,0 ,0,0,0,0], subject.shift([4,0,0,0 ,4,0,0,0 ,0,0,0,0 ,8,0,0,0],"w")
   end
-  
+=end
   #-------------------------------------------------------------------------------------------------------------
   #Loose Test
   it "Lose test >> Actual lose" do
-    assert_equal true, subject.checkLose([1,2,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+    assert_equal true, subject.lost?([1,2,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
   end
 
   it "Lose test >> Not an actual lose (shiftRight)" do
-    assert_equal false, subject.checkLose([1,1,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+    assert_equal false, subject.lost?([1,1,3,4 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
   end
 
   it "Lose test >> Not an actual lose (shiftLeft)" do
-    assert_equal false, subject.checkLose([1,2,3,3 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
+    assert_equal false, subject.lost?([1,2,3,3 ,5,6,7,8 ,9,10,11,12 ,13,14,15,16])
   end
 
   it "Lose test >> Not an actual lose (shiftDown)" do
-    assert_equal false, subject.checkLose([1,2,3,4 ,1,6,7,8 ,9,10,11,12 ,13,14,15,16])
+    assert_equal false, subject.lost?([1,2,3,4 ,1,6,7,8 ,9,10,11,12 ,13,14,15,16])
   end
 
   it "Lose test >> Not an actual lose (shiftUp)" do
-    assert_equal false, subject.checkLose([1,2,3,4 ,5,6,7,8 ,13,10,11,12 ,13,14,15,16])
+    assert_equal false, subject.lost?([1,2,3,4 ,5,6,7,8 ,13,10,11,12 ,13,14,15,16])
   end
 
   #-------------------------------------------------------------------------------------------------------------
   #Win test
   it "Win test >> Actual win" do
-    assert_equal true, subject.checkWin([2048,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal true, subject.won?([2048,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
   it "Win test >> Not an actual win" do
-    assert_equal false, subject.checkWin([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
+    assert_equal false, subject.won?([0,0,0,0 ,0,0,0,0 ,0,0,0,0 ,0,0,0,0])
   end
 
 end
