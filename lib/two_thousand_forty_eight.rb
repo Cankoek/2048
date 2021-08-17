@@ -11,7 +11,7 @@ module TwoThousandFortyEight
 
   #Start function
   def self.run
-    newGame = Game.new
+    Game.new
     true
   end
   #-------------------------------------------------------------------------------------------------------------
@@ -32,7 +32,7 @@ module TwoThousandFortyEight
       mover = Mover.new
       ui = UserInterface.new
       
-      2.times do gridArray = helperFunctions.addRandomNumber(grid) end
+      2.times do grid = helperFunctions.addRandomNumber(grid) end
       while true
         #Check win
         if $alreadyWon == 0 && helperFunctions.won?(grid)
@@ -154,22 +154,22 @@ module TwoThousandFortyEight
     def directionVariables(direction,counter)
       case direction.downcase
       when MOVE_RIGHT
-        @lastMove = 'Right'
+        $lastMove = 'Right'
         tilePosition = 2+counter
         maxTile = -1+counter
         lastPosition = 3+counter
       when MOVE_LEFT
-        @lastMove = 'Left'
+        $lastMove = 'Left'
         tilePosition = 1+counter
         maxTile = 4+counter
         lastPosition = counter
       when MOVE_UP
-        @lastMove = 'Up'
+        $lastMove = 'Up'
         tilePosition = 4+counter
         maxTile = 16+counter
         lastPosition = counter
       when MOVE_DOWN
-        @lastMove = 'Down'
+        $lastMove = 'Down'
         tilePosition = 8+counter
         maxTile = -4+counter
         lastPosition = 12 + counter
@@ -291,7 +291,7 @@ module TwoThousandFortyEight
       helperFunctions = Helper.new
 
       if helperFunctions.lost?(grid) == false
-        print("\nPoints: ", $points, "\tLast move: ", @lastMove, "\n\n")
+        print("\nPoints: ", $points, "\tLast move: ", $lastMove, "\n\n")
       else
         print("\n\n")
       end
