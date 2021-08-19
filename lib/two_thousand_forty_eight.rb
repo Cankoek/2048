@@ -222,6 +222,163 @@ module TwoThousandFortyEight
       end
     end
   end
+
+  class Move
+    def initialize(grid,direction)
+      @merged = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
+      for i in 0..3
+        case direction
+        when RIGHT then shiftRight(grid,i)
+        when LEFT then shiftLeft(grid,i)
+        when DOWN then shiftDown(grid,i)
+        when UP then shiftUp(grid,i)
+        end
+      end
+    end
+
+    def shiftRight(grid,row)
+      col = 2
+      i = 0
+      3.times do
+        if grid[row][col-i] > 0
+          c = 0
+          for c in 1..3
+            if col-i+c < 4 && grid[row][col-i+c] > 0
+              shift(grid,row,col-i,col-i+c,col-i+c-1,"lr")
+              break
+            elsif col-i+c == 3   
+              moveToBack(grid,row,col-i,3,"lr")
+              break
+            end
+          end
+        end
+        i += 1
+      end
+    end
+
+    def shiftLeft(grid,row)
+      col = 1
+      i = 0
+      3.times do
+        if grid[row][col+i] > 0
+          c = 0
+          for c in 1..3
+            if col+i-c < 4 && grid[row][col+i-c] > 0
+              shift(grid,row,col+i,col+i-c,col+i-c+1,"lr")
+              break
+            elsif col+i-c == 0 
+              moveToBack(grid,row,col+i,0,"lr")
+              break
+            end
+          end
+        end
+        i += 1
+      end
+    end
+
+    def shiftDown(grid,col)
+      row = 2
+      i = 0
+      3.times do
+        if grid[row-i][col] > 0
+          c = 0
+          for c in 1..3
+            if row-i+c < 4 && grid[row-i+c][col] > 0
+              shift(grid,row-i,col,row-i+c,row-i+c-1,"ud")
+              break
+            elsif row-i+c == 3  
+              moveToBack(grid,row-i,col,3,"ud")
+              break
+            end
+          end
+        end
+        i += 1
+      end
+    end
+
+    def shiftUp(grid,col)
+      row = 1
+      i = 0
+      3.times do
+        if grid[row+i][col] > 0
+          c = 0
+          for c in 1..3
+            if row+i-c < 4 && grid[row+i-c][col] > 0
+              shift(grid,row+i,col,row+i-c,row+i-c+1,"ud")
+              break
+            elsif row+i-c == 0
+              moveToBack(grid,row+i,col,0,"ud")
+              break
+            end
+          end
+        end
+        i += 1
+      end
+    end
+
+    def shift(grid,row,col,where_to_move,tile_infront,direction)
+      case direction
+      when 'lr'
+        if grid[row][col] == grid[row][where_to_move] && @merged[row][where_to_move] == 0
+          merge(grid,row,col,where_to_move,direction) 
+          return
+        end
+        if col != tile_infront
+          moveInfront(grid,row,col,tile_infront,direction) 
+          return
+        end
+      when 'ud'
+        if grid[row][col] == grid[where_to_move][col]
+          merge(grid,row,col,where_to_move,direction) 
+          return
+        end
+        if row != tile_infront
+          moveInfront(grid,row,col,tile_infront,direction) 
+          return
+        end
+      end
+
+      return grid
+    end
+
+    def merge(grid,row,col,where_to_move,direction)
+      case direction
+      when 'lr'
+        grid[row][where_to_move] = grid[row][col]*2
+        grid[row][col] = 0
+        @merged[row][where_to_move] = 1
+      when 'ud'
+        grid[where_to_move][col] = grid[row][col]*2
+        grid[row][col] = 0
+        @merged[where_to_move][row] = 1
+      end
+      return grid
+    end
+
+    def moveInfront(grid,row,col,tile_infront,direction)
+      case direction
+      when 'lr'
+        grid[row][tile_infront] = grid[row][col]
+        grid[row][col] = 0
+      when 'ud'
+        grid[tile_infront][col] = grid[row][col]
+        grid[row][col] = 0
+      end
+      return grid
+    end
+
+    def moveToBack(grid,row,col,last_tile,direction)
+      case direction
+      when 'lr'
+        grid[row][last_tile] = grid[row][col]
+        grid[row][col] = 0
+      when 'ud'
+        grid[last_tile][col] = grid[row][col]
+        grid[row][col] = 0
+      end
+      return grid
+    end
+  end
   #Help functions
   class Helper
     def addRandomNumber(grid)
