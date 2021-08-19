@@ -7,42 +7,41 @@ module TwoThousandFortyEight
   UP = 'w'
 
   def self.run
-    Game.new
+    grid = [[0,0,0,0], [0,0,16,0], [0,0,16,0], [0,0,32,0]]
+    2.times do Game.new.addRandomNumber(grid) end
+    $points = 0
+    Game.new.routine(grid)
     true
   end
 
   class Game
-    def initialize
-      grid = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
-      2.times do addRandomNumber(grid) end
-      routine(grid)
-    end
-
     def routine(grid)
       while true
+        @won = false
+        $moved = 0
         UserInterface.new.drawInterface(grid)
 
-        if won?(grid) && @won == false
+        if won?(grid) == true && @won == false
+          @won = true
           print("\nCongratulations! You've beat 2048.\nDo you want to continue? (y:Yes n:No)\n")
           exit() if userInput("yn").downcase == 'n'
         end
 
         if lost?(grid)
           print("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
-          if helperFunctions.userInput("yn").downcase == YES then Game.new
+          if userInput("yn").downcase == 'y' then Game.new
           else exit() end
         end
 
         puts("\nw:Up a:Left s:Down d:Right r:Restart e:End\n")
         direction = userInput("wasder")
         Move.new(grid,direction) if "wasd".include? direction.downcase
-        if direction == 'r' then Game.new
+        if direction == 'r' then TwoThousandFortyEight.run
         elsif direction == 'e' then exit end
           
-        addRandomNumber(grid)
+        addRandomNumber(grid) if $moved == 1
       end
     end
-
 
     def addRandomNumber(grid)
       #Adds random Number to random empty tile
@@ -73,7 +72,6 @@ module TwoThousandFortyEight
     def won?(grid)
       #If array contains 2048, you've won
       if grid.flatten.include? 2048
-        @won = true
         return true
       end
       return false
@@ -195,19 +193,23 @@ module TwoThousandFortyEight
       when 'lr'
         if grid[row][col] == grid[row][where_to_move] && @merged[row][where_to_move] == 0
           merge(grid,row,col,where_to_move,direction) 
+          $moved = 1
           return
         end
         if col != tile_infront
-          moveInfront(grid,row,col,tile_infront,direction) 
+          moveInfront(grid,row,col,tile_infront,direction)
+          $moved = 1
           return
         end
       when 'ud'
         if grid[row][col] == grid[where_to_move][col]
           merge(grid,row,col,where_to_move,direction) 
+          $moved = 1
           return
         end
         if row != tile_infront
           moveInfront(grid,row,col,tile_infront,direction) 
+          $moved = 1
           return
         end
       end
@@ -224,6 +226,7 @@ module TwoThousandFortyEight
         grid[row][col] = 0
         @merged[where_to_move][row] = 1
       end
+      $points = $points+2*grid[row][where_to_move]
       return grid
     end
 
@@ -244,9 +247,11 @@ module TwoThousandFortyEight
       when 'lr'
         grid[row][last_tile] = grid[row][col]
         grid[row][col] = 0
+        $moved = 1
       when 'ud'
         grid[last_tile][col] = grid[row][col]
         grid[row][col] = 0
+        $moved = 1
       end
       return grid
     end
@@ -254,6 +259,14 @@ module TwoThousandFortyEight
 
   class UserInterface
     def drawInterface(grid)
+      system 'cls'
+      system 'clear'
+
+      if TwoThousandFortyEight::Game.new.lost?(grid) == false
+        print("\nPoints: ", $points, "\tLast move: ", $lastMove, "\n\n")
+      else
+        print("\n\n")
+      end
       for row in 0..3
         for col in 0..3
           print("[    ", "] ") if grid[row][col] == 0 
@@ -264,7 +277,7 @@ module TwoThousandFortyEight
         end
         print("\n")
       end
-      print("\n")
+      TwoThousandFortyEight::Game.new.lost?(grid) ? print("\n\nYou've reached ", $points, " Points.\n\n") : print("\n")
     end
   end
   #end of module
