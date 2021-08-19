@@ -98,6 +98,12 @@ module TwoThousandFortyEight
   class Move
     def initialize(grid,direction)
       @merged = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
+      case direction
+      when RIGHT then $lastMove = "Right"
+      when LEFT then $lastMove = "Left"
+      when DOWN then $lastMove = "Down"
+      when UP then $lastMove = "Up"
+      end
       for i in 0..3
         case direction
         when RIGHT then shiftRight(grid,i)
