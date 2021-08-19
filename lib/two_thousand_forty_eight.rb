@@ -7,7 +7,7 @@ module TwoThousandFortyEight
   UP = 'w'
 
   def self.run
-    grid = [[0,0,0,0], [0,0,16,0], [0,0,16,0], [0,0,32,0]]
+    grid = [[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
     2.times do Game.new.addRandomNumber(grid) end
     $points = 0
     Game.new.routine(grid)
