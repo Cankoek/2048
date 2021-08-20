@@ -270,7 +270,15 @@ module TwoThousandFortyEight
 
       if lost?(grid) == false
         print("\nPoints: ", $points, "\tLast move: ", $lastMove, "\n\n")
-      elseTwoThousandFortyEight::Game.new.d[row][col] >= 100 && grid[row][col] < 1000 
+      else
+        print("\n\n")
+      end
+      for row in 0..3
+        for col in 0..3
+          print("[    ", "] ") if grid[row][col] == 0 
+          print("[   ", grid[row][col] , "] ") if grid[row][col] > 0 && grid[row][col] < 10 
+          print("[  ",grid[row][col] , "] ") if grid[row][col] >= 10 && grid[row][col] < 100 
+          print("[ ",grid[row][col] , "] ") if grid[row][col] >= 100 && grid[row][col] < 1000 
           print("[",grid[row][col] , "] ") if grid[row][col] >= 1000 
         end
         print("\n")
