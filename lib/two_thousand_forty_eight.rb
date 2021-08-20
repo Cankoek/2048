@@ -29,7 +29,7 @@ module TwoThousandFortyEight
 
         if lost?(grid)
           print("You lost! You have no moves left. \nDo you want to restart the game? (y:Yes n:No)\n")
-          if userInput("yn").downcase == 'y' then Game.new
+          if userInput("yn").downcase == 'y' then TwoThousandFortyEight.run
           else exit() end
         end
 
